@@ -33,6 +33,12 @@
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\video_capture\video_capture.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\video_capture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DShowCapture.cpp">
@@ -42,6 +48,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\video_capture.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -54,6 +63,7 @@
     <None Include="res\DShowCapture.rc2">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="DShowCapture.aps" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\DShowCapture.ico">

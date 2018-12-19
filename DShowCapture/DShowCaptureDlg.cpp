@@ -7,6 +7,7 @@
 #include "DShowCaptureDlg.h"
 #include "afxdialogex.h"
 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -66,7 +67,7 @@ BEGIN_MESSAGE_MAP(CDShowCaptureDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_RECORD, &CDShowCaptureDlg::OnBnClickedButtonRecord)
 	ON_BN_CLICKED(IDC_BUTTON_CAPTURE, &CDShowCaptureDlg::OnBnClickedButtonCapture)
 	ON_BN_CLICKED(IDC_BUTTON_GETDEVICES, &CDShowCaptureDlg::OnBnClickedButtonGetdevices)
-	ON_BN_CLICKED(IDC_BUTTON2, &CDShowCaptureDlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON_CAMERASET, &CDShowCaptureDlg::OnBnClickedButtonCameraset)
 END_MESSAGE_MAP()
 
 
@@ -102,6 +103,8 @@ BOOL CDShowCaptureDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO:  在此添加额外的初始化代码
+
+	m_pVideoCapture =new CVideoCapture();
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -177,10 +180,14 @@ void CDShowCaptureDlg::OnBnClickedButtonCapture()
 void CDShowCaptureDlg::OnBnClickedButtonGetdevices()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	ASImgDeviceInfoArray VidDevInfo;
+	m_pVideoCapture->ListVideoCaptureDevices(VidDevInfo);
 }
 
 
-void CDShowCaptureDlg::OnBnClickedButton2()
+
+
+void CDShowCaptureDlg::OnBnClickedButtonCameraset()
 {
 	// TODO:  在此添加控件通知处理程序代码
 }

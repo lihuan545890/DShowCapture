@@ -31,8 +31,36 @@
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
 #include <afxcontrolbars.h>     // 功能区和控件条的 MFC 支持
+#include <stdio.h>  
+#include <stdlib.h>  
+//#include "inttypes.h"
+#include "stdint.h"
 
+#include <fstream>
+#include <string>
+#include <regex>
+using namespace std;
 
+//DShow库加载
+#include "Wmcodecdsp.h"
+#pragma comment(lib,"wmcodecdspuuid.lib")
+
+#include "Dshow.h"
+#include <qedit.h>
+#include "Dmodshow.h"
+#include "dmo.h"
+
+#ifdef _DEBUG
+#pragma comment(lib,"strmbasd.lib")
+#else
+#pragma comment(lib,"STRMBASE.lib")
+#endif
+#pragma comment(lib,"strmiids.lib")
+#pragma comment(lib,"quartz.lib")
+#pragma comment(lib,"dmoguids.lib")   
+
+//要支持YUV420,也就是WMMEDIASUBTYPE_I420必须添加此头文件
+#include <wmsdkidl.h>
 
 
 
