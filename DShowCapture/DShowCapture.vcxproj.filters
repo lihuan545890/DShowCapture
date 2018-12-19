@@ -39,6 +39,9 @@
     <ClInclude Include="include\video_capture.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\SampleGrabberCB.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DShowCapture.cpp">
@@ -51,6 +54,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\video_capture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SampleGrabberCB.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

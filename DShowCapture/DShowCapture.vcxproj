@@ -55,7 +55,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
@@ -108,6 +108,7 @@
   <ItemGroup>
     <ClInclude Include="DShowCapture.h" />
     <ClInclude Include="DShowCaptureDlg.h" />
+    <ClInclude Include="include\SampleGrabberCB.h" />
     <ClInclude Include="include\video_capture.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="src\video_capture\video_capture.h" />
@@ -117,6 +118,7 @@
   <ItemGroup>
     <ClCompile Include="DShowCapture.cpp" />
     <ClCompile Include="DShowCaptureDlg.cpp" />
+    <ClCompile Include="src\SampleGrabberCB.cpp" />
     <ClCompile Include="src\video_capture.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>

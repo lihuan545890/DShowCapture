@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include <sys/timeb.h>
+#include "SampleGrabberCB.h"
 
 //用来存储视音频数据
 struct GrabDataInfo
@@ -104,12 +105,31 @@ public:
 	~CVideoCapture();
 
 	void ListVideoCaptureDevices(ASImgDeviceInfoArray &VidDevInfo);
-	bool InitVideoCapture();
-	bool StartVideoCapture();
-	bool StopVideoCapture();
+	void ListAudioCaptureDevices(ASImgDeviceInfoArray &VidDevInfo);
+	void GetVideoResolution(ASCamResolutionInfoArray &VidResolution);
+	bool InitCapture(CString AudDevName, CString VidDevName);
+	bool StartCapture(int index, HWND hwnd);
+	bool StopCapture();
+
+	IGraphBuilder *m_pGraphBuilder;
+	ICaptureGraphBuilder2* m_pCapture;
+	IBaseFilter* m_pVideoFilter;
+	IBaseFilter* m_pAudioFilter;
+	IMediaControl  *m_pMediaControl;
+	IVideoWindow* m_pVW;
+	IBaseFilter* m_pVideoGrabberFilter;
+	IBaseFilter* m_pAudioGrabberFilter;
+	ISampleGrabber* m_pVideoGrabber;
+	ISampleGrabber* m_pAudioGrabber;
+	CSampleGrabberCB m_videoCB;
+	CSampleGrabberCB m_audioCB;
+	HWND m_hShowWnd;
 
 private:
-
+	void CreateVideoFilter(CString strSelectedDevice, IBaseFilter **pBaseFilter);
+	void CreateAudioFilter(CString strSelectedDevice, IBaseFilter **pBaseFilter);
+	HRESULT InitCaptureGraphBuilder(IGraphBuilder **ppGraph, ICaptureGraphBuilder2 **ppBuild);
+	void FreeMediaType(AM_MEDIA_TYPE *pmt);
 };
 
 #endif

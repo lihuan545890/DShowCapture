@@ -25,7 +25,13 @@ public:
 	CComboBox m_cbxVideoResList;
 	ASImgDeviceInfoArray m_asVideoDeviceInfo;
 	ASImgDeviceInfoArray m_asAudioDeviceInfo;
+	ASCamResolutionInfoArray m_arrCamResolutionArr;
 
+	BOOL m_bInit;
+	BOOL m_bIsVideoOpen;
+
+	int m_nWidth;
+	int m_nHeight;
 // й╣ож
 protected:
 	HICON m_hIcon;
@@ -42,4 +48,5 @@ public:
 	afx_msg void OnBnClickedButtonCapture();
 	afx_msg void OnBnClickedButtonGetdevices();
 	afx_msg void OnBnClickedButtonCameraset();
+	afx_msg void OnBnClickedButtonInit();
 };

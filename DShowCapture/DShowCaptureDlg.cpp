@@ -52,11 +52,16 @@ CDShowCaptureDlg::CDShowCaptureDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CDShowCaptureDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	m_bInit = FALSE;
+	m_bIsVideoOpen = FALSE;
 }
 
 void CDShowCaptureDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_COMBO_VIDEODEVICES, m_cbxVideoDevList);
+	DDX_Control(pDX, IDC_COMBO_AUDEODEVICES, m_cbxAudioDevList);
+	DDX_Control(pDX, IDC_COMBO_VIDEORESOLUTION, m_cbxVideoResList);
 }
 
 BEGIN_MESSAGE_MAP(CDShowCaptureDlg, CDialogEx)
@@ -68,6 +73,7 @@ BEGIN_MESSAGE_MAP(CDShowCaptureDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_CAPTURE, &CDShowCaptureDlg::OnBnClickedButtonCapture)
 	ON_BN_CLICKED(IDC_BUTTON_GETDEVICES, &CDShowCaptureDlg::OnBnClickedButtonGetdevices)
 	ON_BN_CLICKED(IDC_BUTTON_CAMERASET, &CDShowCaptureDlg::OnBnClickedButtonCameraset)
+	ON_BN_CLICKED(IDC_BUTTON_INIT, &CDShowCaptureDlg::OnBnClickedButtonInit)
 END_MESSAGE_MAP()
 
 
@@ -174,6 +180,64 @@ void CDShowCaptureDlg::OnBnClickedButtonRecord()
 void CDShowCaptureDlg::OnBnClickedButtonCapture()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	if (!m_bInit)
+	{
+		MessageBox(_T("请先初始化！"), _T("提示"));
+		return;
+	}
+
+	if (m_bIsVideoOpen)
+	{
+		MessageBox(_T("相机已经打开！"), _T("提示"));
+		return;
+	}
+
+	//选择一个分辨率
+	int nSel = m_cbxVideoResList.GetCurSel();
+	if (nSel < 0)
+	{
+		MessageBox(_T("请选择一个分辨率"), _T("提示"));
+		return;
+	}
+	CString strResolution = _T("");
+	m_cbxVideoResList.GetLBText(nSel, strResolution);
+	if (strResolution.IsEmpty())
+	{
+		MessageBox(_T("请选择一个有值分辨率"), _T("提示"));
+		return;
+	}
+
+	int nSetWidth = -1;
+	int nSetHeight = -1;
+	int nFindValue = strResolution.Find(_T("*"));
+	if (nFindValue > 0)
+	{
+		nSetWidth = _ttoi(strResolution.Left(nFindValue));
+
+		CString strTempValue = strResolution.Mid(nFindValue + 1);
+		nFindValue = strTempValue.Find(_T(","));
+
+		nSetHeight = _ttoi(strTempValue.Left(nFindValue));
+	}
+	int nResolutionIndex = 0; //默认为0，即当前默认分辨率
+	for (int i = 0; i < m_arrCamResolutionArr.GetSize(); i++)
+	{
+		CamResolutionInfo camInfo = m_arrCamResolutionArr.GetAt(i);
+	//	TRACE("nWidth:%d, nSetWidth:%d, nHeight:%d, nSetHeight:%d\n", camInfo.nWidth, nSetWidth, camInfo.nHeight, nSetHeight);
+		if (camInfo.nWidth = nSetWidth && camInfo.nHeight == nSetHeight)
+		{
+	//		TRACE("selected index: %d\n", nResolutionIndex);
+			nResolutionIndex = camInfo.nResolutionIndex;
+			break;
+		}
+	}
+	m_nWidth = nSetWidth;
+	m_nHeight = nSetHeight;
+
+	HWND h_wnd = GetDlgItem(IDC_STATIC_PREVIEW)->m_hWnd;
+	m_pVideoCapture->StartCapture(nResolutionIndex, h_wnd);
+	TRACE("selected index: %d, m_nWidth:%d, m_nHeight: %d\n", nResolutionIndex, m_nWidth, m_nHeight);
+	m_bIsVideoOpen = TRUE;
 }
 
 
@@ -182,6 +246,32 @@ void CDShowCaptureDlg::OnBnClickedButtonGetdevices()
 	// TODO:  在此添加控件通知处理程序代码
 	ASImgDeviceInfoArray VidDevInfo;
 	m_pVideoCapture->ListVideoCaptureDevices(VidDevInfo);
+
+	for (int i = 0; i < VidDevInfo.GetSize(); i++)
+	{
+		ImgDeviceInfo sImgDevInfo = VidDevInfo.GetAt(i);
+		m_cbxVideoDevList.AddString(sImgDevInfo.strDeviceName);
+	}
+
+	if (m_cbxVideoDevList.GetCount() > 0)
+	{
+		m_cbxVideoDevList.SetCurSel(0);
+	}
+
+	ASImgDeviceInfoArray AudDevInfo;
+	m_pVideoCapture->ListAudioCaptureDevices(AudDevInfo);
+
+	for (int i = 0; i < AudDevInfo.GetSize(); i++)
+	{
+		ImgDeviceInfo sImgDevInfo = AudDevInfo.GetAt(i);
+		m_cbxAudioDevList.AddString(sImgDevInfo.strDeviceName);
+	}
+
+	if (m_cbxAudioDevList.GetCount() > 0)
+	{
+		m_cbxAudioDevList.SetCurSel(0);
+	}
+
 }
 
 
@@ -190,4 +280,65 @@ void CDShowCaptureDlg::OnBnClickedButtonGetdevices()
 void CDShowCaptureDlg::OnBnClickedButtonCameraset()
 {
 	// TODO:  在此添加控件通知处理程序代码
+}
+
+
+void CDShowCaptureDlg::OnBnClickedButtonInit()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	CString strVidDevName, strAudDevName;
+
+	if (m_bInit)
+	{
+		return;
+	}
+
+	int nVideoIndex = m_cbxVideoDevList.GetCurSel();
+	if (nVideoIndex < 0)
+	{
+		MessageBox(_T("请选择视频设备"), _T("提示"));
+		return;
+	}
+
+	int nAudioIndex = m_cbxAudioDevList.GetCurSel();
+	if (nAudioIndex < 0)
+	{
+		MessageBox(_T("请选择音频设备"), _T("提示"));
+		return;
+	}
+
+	m_cbxVideoDevList.GetLBText(nVideoIndex, strVidDevName);
+	m_cbxAudioDevList.GetLBText(nAudioIndex, strAudDevName);
+
+	if (strVidDevName.IsEmpty())
+	{
+		MessageBox(_T("获取视频设备名称为空"), _T("提示"));
+		return;
+	}
+
+	if (strAudDevName.IsEmpty())
+	{
+		MessageBox(_T("获取音频设备名称为空"), _T("提示"));
+		return;
+	}
+
+	m_pVideoCapture->InitCapture(strVidDevName, strAudDevName);
+
+	ASCamResolutionInfoArray VidResolution;
+	m_pVideoCapture->GetVideoResolution(VidResolution);
+	for (int i = 0; i < VidResolution.GetSize(); i++)
+	{
+		CamResolutionInfo sVidResInfo = VidResolution.GetAt(i);
+		CString strFormat = _T("");
+		strFormat.Format(_T("%d * %d , %s"), sVidResInfo.nWidth, sVidResInfo.nHeight, sVidResInfo.strSubType);
+		m_cbxVideoResList.AddString(strFormat);
+	}
+
+	m_arrCamResolutionArr.Copy(VidResolution);
+	if (m_cbxVideoResList.GetCount() > 0)
+	{
+		m_cbxVideoResList.SetCurSel(0);
+	}
+
+	m_bInit = TRUE;
 }
