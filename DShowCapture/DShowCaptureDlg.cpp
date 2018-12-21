@@ -235,8 +235,8 @@ void CDShowCaptureDlg::OnBnClickedButtonCapture()
 	m_nHeight = nSetHeight;
 
 	HWND h_wnd = GetDlgItem(IDC_STATIC_PREVIEW)->m_hWnd;
-	m_pVideoCapture->StartCapture(nResolutionIndex, h_wnd);
-	TRACE("selected index: %d, m_nWidth:%d, m_nHeight: %d\n", nResolutionIndex, m_nWidth, m_nHeight);
+	m_pVideoCapture->StartCapture(nResolutionIndex, h_wnd, m_nWidth, m_nHeight);
+
 	m_bIsVideoOpen = TRUE;
 }
 

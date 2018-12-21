@@ -44,8 +44,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>.\bin</OutDir>
-    <LibraryPath>.\lib;$(LibraryPath);.\lib\DirectShow;</LibraryPath>
-    <IncludePath>.\;.\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);.\include\DirectShow</IncludePath>
+    <LibraryPath>.\lib;$(LibraryPath);.\codec\lib;.\lib\DirectShow</LibraryPath>
+    <IncludePath>.\;.\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);.\include\DirectShow;.\codec\include;.\codec</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -55,14 +55,16 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -74,6 +76,9 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -106,6 +111,136 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="codec\h264_codec.h" />
+    <ClInclude Include="codec\include\libavcodec\ac3_parser.h" />
+    <ClInclude Include="codec\include\libavcodec\adts_parser.h" />
+    <ClInclude Include="codec\include\libavcodec\avcodec.h" />
+    <ClInclude Include="codec\include\libavcodec\avdct.h" />
+    <ClInclude Include="codec\include\libavcodec\avfft.h" />
+    <ClInclude Include="codec\include\libavcodec\d3d11va.h" />
+    <ClInclude Include="codec\include\libavcodec\dirac.h" />
+    <ClInclude Include="codec\include\libavcodec\dv_profile.h" />
+    <ClInclude Include="codec\include\libavcodec\dxva2.h" />
+    <ClInclude Include="codec\include\libavcodec\jni.h" />
+    <ClInclude Include="codec\include\libavcodec\mediacodec.h" />
+    <ClInclude Include="codec\include\libavcodec\qsv.h" />
+    <ClInclude Include="codec\include\libavcodec\vaapi.h" />
+    <ClInclude Include="codec\include\libavcodec\vdpau.h" />
+    <ClInclude Include="codec\include\libavcodec\version.h" />
+    <ClInclude Include="codec\include\libavcodec\videotoolbox.h" />
+    <ClInclude Include="codec\include\libavcodec\vorbis_parser.h" />
+    <ClInclude Include="codec\include\libavcodec\xvmc.h" />
+    <ClInclude Include="codec\include\libavfilter\avfilter.h" />
+    <ClInclude Include="codec\include\libavfilter\buffersink.h" />
+    <ClInclude Include="codec\include\libavfilter\buffersrc.h" />
+    <ClInclude Include="codec\include\libavfilter\version.h" />
+    <ClInclude Include="codec\include\libavformat\avformat.h" />
+    <ClInclude Include="codec\include\libavformat\avio.h" />
+    <ClInclude Include="codec\include\libavformat\version.h" />
+    <ClInclude Include="codec\include\libavutil\adler32.h" />
+    <ClInclude Include="codec\include\libavutil\aes.h" />
+    <ClInclude Include="codec\include\libavutil\aes_ctr.h" />
+    <ClInclude Include="codec\include\libavutil\attributes.h" />
+    <ClInclude Include="codec\include\libavutil\audio_fifo.h" />
+    <ClInclude Include="codec\include\libavutil\avassert.h" />
+    <ClInclude Include="codec\include\libavutil\avconfig.h" />
+    <ClInclude Include="codec\include\libavutil\avstring.h" />
+    <ClInclude Include="codec\include\libavutil\avutil.h" />
+    <ClInclude Include="codec\include\libavutil\base64.h" />
+    <ClInclude Include="codec\include\libavutil\blowfish.h" />
+    <ClInclude Include="codec\include\libavutil\bprint.h" />
+    <ClInclude Include="codec\include\libavutil\bswap.h" />
+    <ClInclude Include="codec\include\libavutil\buffer.h" />
+    <ClInclude Include="codec\include\libavutil\camellia.h" />
+    <ClInclude Include="codec\include\libavutil\cast5.h" />
+    <ClInclude Include="codec\include\libavutil\channel_layout.h" />
+    <ClInclude Include="codec\include\libavutil\common.h" />
+    <ClInclude Include="codec\include\libavutil\cpu.h" />
+    <ClInclude Include="codec\include\libavutil\crc.h" />
+    <ClInclude Include="codec\include\libavutil\des.h" />
+    <ClInclude Include="codec\include\libavutil\dict.h" />
+    <ClInclude Include="codec\include\libavutil\display.h" />
+    <ClInclude Include="codec\include\libavutil\downmix_info.h" />
+    <ClInclude Include="codec\include\libavutil\encryption_info.h" />
+    <ClInclude Include="codec\include\libavutil\error.h" />
+    <ClInclude Include="codec\include\libavutil\eval.h" />
+    <ClInclude Include="codec\include\libavutil\ffversion.h" />
+    <ClInclude Include="codec\include\libavutil\fifo.h" />
+    <ClInclude Include="codec\include\libavutil\file.h" />
+    <ClInclude Include="codec\include\libavutil\frame.h" />
+    <ClInclude Include="codec\include\libavutil\hash.h" />
+    <ClInclude Include="codec\include\libavutil\hmac.h" />
+    <ClInclude Include="codec\include\libavutil\hwcontext.h" />
+    <ClInclude Include="codec\include\libavutil\hwcontext_cuda.h" />
+    <ClInclude Include="codec\include\libavutil\hwcontext_d3d11va.h" />
+    <ClInclude Include="codec\include\libavutil\hwcontext_drm.h" />
+    <ClInclude Include="codec\include\libavutil\hwcontext_dxva2.h" />
+    <ClInclude Include="codec\include\libavutil\hwcontext_mediacodec.h" />
+    <ClInclude Include="codec\include\libavutil\hwcontext_qsv.h" />
+    <ClInclude Include="codec\include\libavutil\hwcontext_vaapi.h" />
+    <ClInclude Include="codec\include\libavutil\hwcontext_vdpau.h" />
+    <ClInclude Include="codec\include\libavutil\hwcontext_videotoolbox.h" />
+    <ClInclude Include="codec\include\libavutil\imgutils.h" />
+    <ClInclude Include="codec\include\libavutil\intfloat.h" />
+    <ClInclude Include="codec\include\libavutil\intreadwrite.h" />
+    <ClInclude Include="codec\include\libavutil\lfg.h" />
+    <ClInclude Include="codec\include\libavutil\log.h" />
+    <ClInclude Include="codec\include\libavutil\macros.h" />
+    <ClInclude Include="codec\include\libavutil\mastering_display_metadata.h" />
+    <ClInclude Include="codec\include\libavutil\mathematics.h" />
+    <ClInclude Include="codec\include\libavutil\md5.h" />
+    <ClInclude Include="codec\include\libavutil\mem.h" />
+    <ClInclude Include="codec\include\libavutil\motion_vector.h" />
+    <ClInclude Include="codec\include\libavutil\murmur3.h" />
+    <ClInclude Include="codec\include\libavutil\opt.h" />
+    <ClInclude Include="codec\include\libavutil\parseutils.h" />
+    <ClInclude Include="codec\include\libavutil\pixdesc.h" />
+    <ClInclude Include="codec\include\libavutil\pixelutils.h" />
+    <ClInclude Include="codec\include\libavutil\pixfmt.h" />
+    <ClInclude Include="codec\include\libavutil\random_seed.h" />
+    <ClInclude Include="codec\include\libavutil\rational.h" />
+    <ClInclude Include="codec\include\libavutil\rc4.h" />
+    <ClInclude Include="codec\include\libavutil\replaygain.h" />
+    <ClInclude Include="codec\include\libavutil\ripemd.h" />
+    <ClInclude Include="codec\include\libavutil\samplefmt.h" />
+    <ClInclude Include="codec\include\libavutil\sha.h" />
+    <ClInclude Include="codec\include\libavutil\sha512.h" />
+    <ClInclude Include="codec\include\libavutil\spherical.h" />
+    <ClInclude Include="codec\include\libavutil\stereo3d.h" />
+    <ClInclude Include="codec\include\libavutil\tea.h" />
+    <ClInclude Include="codec\include\libavutil\threadmessage.h" />
+    <ClInclude Include="codec\include\libavutil\time.h" />
+    <ClInclude Include="codec\include\libavutil\timecode.h" />
+    <ClInclude Include="codec\include\libavutil\timestamp.h" />
+    <ClInclude Include="codec\include\libavutil\tree.h" />
+    <ClInclude Include="codec\include\libavutil\twofish.h" />
+    <ClInclude Include="codec\include\libavutil\version.h" />
+    <ClInclude Include="codec\include\libavutil\xtea.h" />
+    <ClInclude Include="codec\include\libswresample\swresample.h" />
+    <ClInclude Include="codec\include\libswresample\version.h" />
+    <ClInclude Include="codec\include\libswscale\swscale.h" />
+    <ClInclude Include="codec\include\libswscale\version.h" />
+    <ClInclude Include="codec\libyuv.h" />
+    <ClInclude Include="codec\libyuv\basic_types.h" />
+    <ClInclude Include="codec\libyuv\compare.h" />
+    <ClInclude Include="codec\libyuv\compare_row.h" />
+    <ClInclude Include="codec\libyuv\convert.h" />
+    <ClInclude Include="codec\libyuv\convert_argb.h" />
+    <ClInclude Include="codec\libyuv\convert_from.h" />
+    <ClInclude Include="codec\libyuv\convert_from_argb.h" />
+    <ClInclude Include="codec\libyuv\cpu_id.h" />
+    <ClInclude Include="codec\libyuv\macros_msa.h" />
+    <ClInclude Include="codec\libyuv\mjpeg_decoder.h" />
+    <ClInclude Include="codec\libyuv\planar_functions.h" />
+    <ClInclude Include="codec\libyuv\rotate.h" />
+    <ClInclude Include="codec\libyuv\rotate_argb.h" />
+    <ClInclude Include="codec\libyuv\rotate_row.h" />
+    <ClInclude Include="codec\libyuv\row.h" />
+    <ClInclude Include="codec\libyuv\scale.h" />
+    <ClInclude Include="codec\libyuv\scale_argb.h" />
+    <ClInclude Include="codec\libyuv\scale_row.h" />
+    <ClInclude Include="codec\libyuv\version.h" />
+    <ClInclude Include="codec\libyuv\video_common.h" />
     <ClInclude Include="DShowCapture.h" />
     <ClInclude Include="DShowCaptureDlg.h" />
     <ClInclude Include="include\SampleGrabberCB.h" />
@@ -116,6 +251,10 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="codec\h264_codec.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
     <ClCompile Include="DShowCapture.cpp" />
     <ClCompile Include="DShowCaptureDlg.cpp" />
     <ClCompile Include="src\SampleGrabberCB.cpp" />
@@ -136,6 +275,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\DShowCapture.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="codec\lib\avcodec.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

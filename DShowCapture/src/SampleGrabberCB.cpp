@@ -2,10 +2,10 @@
 //#include "QDshowRecordToMp4.h"
 #include "SampleGrabberCB.h"
 
-
 CSampleGrabberCB::CSampleGrabberCB(void)
 {
 	m_bBeginEncode = FALSE; 
+	m_tVidParam.pYUVBuf = NULL;
 }
 
 CSampleGrabberCB::~CSampleGrabberCB(void)
@@ -43,17 +43,32 @@ HRESULT STDMETHODCALLTYPE CSampleGrabberCB::SampleCB(double SampleTime, IMediaSa
 //FILE *fp1 = fopen("d:\\yuv\\test.pcm", "wb");
 HRESULT STDMETHODCALLTYPE CSampleGrabberCB::BufferCB(double SampleTime, BYTE *pBuffer, long BufferLen)
 {
-	//开始编码，也是开始录制
-/*	TRACE("cb data BufferLen:%d\n", BufferLen);
+
 	if (m_nMediaType == 0)
 	{
-		fwrite(pBuffer, BufferLen, 1, fp);
+		if(m_tVidParam.pYUVBuf == NULL)
+		{
+			m_tVidParam.pYUVBuf = (unsigned char *) malloc(m_tVidParam.nWidth * m_tVidParam.nHeight * 3 / 2);
+		}
+		int src_stride_yuy2 = m_tVidParam.nWidth * 2;
+		unsigned char * src_yuy2 =  pBuffer;
+
+		
+		int dst_stride_y = m_tVidParam.nWidth;
+		int dst_stride_u = m_tVidParam.nWidth / 2;
+		int dst_stride_v = m_tVidParam.nWidth / 2;		
+
+		uint8_t *dst_y = m_tVidParam.pYUVBuf;
+		uint8_t *dst_u = m_tVidParam.pYUVBuf + m_tVidParam.nWidth * m_tVidParam.nHeight;
+		uint8_t *dst_v = m_tVidParam.pYUVBuf + m_tVidParam.nWidth * m_tVidParam.nHeight * 5 / 4;		
+		libyuv::YUY2ToI420(src_yuy2, src_stride_yuy2, dst_y, dst_stride_y, dst_u, dst_stride_u, dst_v, dst_stride_v, m_tVidParam.nWidth, m_tVidParam.nHeight);
+
 	}
 	else
 	{
-		fwrite(pBuffer, BufferLen, 1, fp1);
+	//	fwrite(pBuffer, BufferLen, 1, fp1);
 	}
-*/
+
 
 	if (m_bBeginEncode)
 	{

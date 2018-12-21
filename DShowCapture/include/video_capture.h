@@ -108,7 +108,7 @@ public:
 	void ListAudioCaptureDevices(ASImgDeviceInfoArray &VidDevInfo);
 	void GetVideoResolution(ASCamResolutionInfoArray &VidResolution);
 	bool InitCapture(CString AudDevName, CString VidDevName);
-	bool StartCapture(int index, HWND hwnd);
+	bool StartCapture(int index, HWND hwnd, int width, int height);
 	bool StopCapture();
 
 	IGraphBuilder *m_pGraphBuilder;

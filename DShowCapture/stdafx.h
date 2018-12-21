@@ -59,10 +59,17 @@ using namespace std;
 #pragma comment(lib,"quartz.lib")
 #pragma comment(lib,"dmoguids.lib")   
 
+#pragma comment(lib,"avcodec.lib")  
+#pragma comment(lib,"avfilter.lib")  
+#pragma comment(lib,"avformat.lib")  
+#pragma comment(lib,"avutil.lib")  
+#pragma comment(lib,"swscale.lib")  
+
+
 //要支持YUV420,也就是WMMEDIASUBTYPE_I420必须添加此头文件
 #include <wmsdkidl.h>
-
-
+#include "libyuv.h"
+#pragma comment(lib,"libyuv.lib")  
 
 
 

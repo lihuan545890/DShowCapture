@@ -1,6 +1,16 @@
 #pragma once
 #include "qedit.h"
 
+#define COLOR_FormatYUY2 0
+#define COLOR_FormatRGB24 1
+
+typedef struct
+{
+	int nWidth;
+	int nHeight;
+	int nColorFormat;
+	unsigned char *pYUVBuf;
+}VIDEO_PARAM;
 
 class CSampleGrabberCB :
 	public ISampleGrabberCB
@@ -19,6 +29,7 @@ public:
 public:
 	BOOL m_bBeginEncode;
 	int  m_nMediaType;
+	VIDEO_PARAM m_tVidParam;
 
 };
 

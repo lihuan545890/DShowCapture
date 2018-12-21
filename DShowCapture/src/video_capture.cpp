@@ -63,8 +63,8 @@ bool CVideoCapture::InitCapture(CString VidDevName, CString AudDevName)
 	m_pVideoFilter->QueryInterface(IID_IAMCameraControl, (void **)&m_pCtrl);
 	if (m_pCtrl)
 	{
-		m_pCtrl->Get(CameraControl_Exposure, &nValue, &nFlag);
-		m_pCtrl->Set(CameraControl_Exposure, nValue, CameraControl_Flags_Manual);
+	//	m_pCtrl->Get(CameraControl_Exposure, &nValue, &nFlag);
+	//	m_pCtrl->Set(CameraControl_Exposure, nValue, CameraControl_Flags_Manual);
 	}
 
 	hr = m_pGraphBuilder->AddFilter(m_pAudioFilter, L"Audio Capture Filter");
@@ -90,7 +90,7 @@ bool CVideoCapture::InitCapture(CString VidDevName, CString AudDevName)
 	return true;
 }
 
-bool CVideoCapture::StartCapture(int index, HWND hwnd)
+bool CVideoCapture::StartCapture(int index, HWND hwnd, int width, int height)
 {
 	IAMStreamConfig *pConfig = NULL;
 	m_pCapture->FindInterface(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Video,
@@ -109,7 +109,7 @@ bool CVideoCapture::StartCapture(int index, HWND hwnd)
 		pmt->formattype = FORMAT_VideoInfo;
 
 		pConfig->SetFormat(pmt);
-		TRACE("Support Type: YUY2\n");
+		m_videoCB.m_tVidParam.nColorFormat = COLOR_FormatYUY2;
 	}
 	else  //如果不是YUY2，则默认为RGB24，需要摄像头支持RGB24，否则只能针对支持的类型做处理
 	{
@@ -120,7 +120,7 @@ bool CVideoCapture::StartCapture(int index, HWND hwnd)
 		pmt->formattype = FORMAT_VideoInfo;
 
 		pConfig->SetFormat(pmt);
-		TRACE("Support Type: RGB24\n");
+		m_videoCB.m_tVidParam.nColorFormat = COLOR_FormatRGB24;		
 	}
 
 	m_pVideoGrabberFilter->QueryInterface(IID_ISampleGrabber, (void **)&m_pVideoGrabber);
@@ -135,7 +135,8 @@ bool CVideoCapture::StartCapture(int index, HWND hwnd)
 	m_pVideoGrabber->SetOneShot(FALSE);
 	m_pVideoGrabber->SetCallback(&m_videoCB, 1);
 	m_videoCB.m_nMediaType = 0;
-
+	m_videoCB.m_tVidParam.nWidth = width;
+	m_videoCB.m_tVidParam.nHeight = height;
 	//设置音频抓取数据
 	m_pAudioGrabberFilter->QueryInterface(IID_ISampleGrabber, (void **)&m_pAudioGrabber);
 
