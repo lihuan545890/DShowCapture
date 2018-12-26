@@ -432,6 +432,18 @@
     <ClInclude Include="codec\libyuv\video_common.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\framequeue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pthread.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sched.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\semaphore.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DShowCapture.cpp">
@@ -450,6 +462,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="codec\h264_codec.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\framequeue.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

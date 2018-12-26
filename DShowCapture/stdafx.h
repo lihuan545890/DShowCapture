@@ -70,7 +70,7 @@ using namespace std;
 #include <wmsdkidl.h>
 #include "libyuv.h"
 #pragma comment(lib,"libyuv.lib")  
-
+#pragma comment(lib, "pthreadVC2.lib")
 
 
 

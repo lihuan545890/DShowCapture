@@ -243,7 +243,11 @@
     <ClInclude Include="codec\libyuv\video_common.h" />
     <ClInclude Include="DShowCapture.h" />
     <ClInclude Include="DShowCaptureDlg.h" />
+    <ClInclude Include="include\framequeue.h" />
+    <ClInclude Include="include\pthread.h" />
     <ClInclude Include="include\SampleGrabberCB.h" />
+    <ClInclude Include="include\sched.h" />
+    <ClInclude Include="include\semaphore.h" />
     <ClInclude Include="include\video_capture.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="src\video_capture\video_capture.h" />
@@ -257,6 +261,9 @@
     </ClCompile>
     <ClCompile Include="DShowCapture.cpp" />
     <ClCompile Include="DShowCaptureDlg.cpp" />
+    <ClCompile Include="src\framequeue.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\SampleGrabberCB.cpp" />
     <ClCompile Include="src\video_capture.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

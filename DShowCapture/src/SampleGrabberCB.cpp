@@ -39,7 +39,7 @@ HRESULT STDMETHODCALLTYPE CSampleGrabberCB::SampleCB(double SampleTime, IMediaSa
 	return 0;
 }
  
-//FILE *fp = fopen("d:\\yuv\\test.yuv", "wb");
+FILE *fp = fopen("d:\\yuv\\test.yuv", "wb");
 //FILE *fp1 = fopen("d:\\yuv\\test.pcm", "wb");
 HRESULT STDMETHODCALLTYPE CSampleGrabberCB::BufferCB(double SampleTime, BYTE *pBuffer, long BufferLen)
 {
@@ -50,7 +50,7 @@ HRESULT STDMETHODCALLTYPE CSampleGrabberCB::BufferCB(double SampleTime, BYTE *pB
 		{
 			m_tVidParam.pYUVBuf = (unsigned char *) malloc(m_tVidParam.nWidth * m_tVidParam.nHeight * 3 / 2);
 		}
-		int src_stride_yuy2 = m_tVidParam.nWidth * 2;
+
 		unsigned char * src_yuy2 =  pBuffer;
 
 		
@@ -61,7 +61,32 @@ HRESULT STDMETHODCALLTYPE CSampleGrabberCB::BufferCB(double SampleTime, BYTE *pB
 		uint8_t *dst_y = m_tVidParam.pYUVBuf;
 		uint8_t *dst_u = m_tVidParam.pYUVBuf + m_tVidParam.nWidth * m_tVidParam.nHeight;
 		uint8_t *dst_v = m_tVidParam.pYUVBuf + m_tVidParam.nWidth * m_tVidParam.nHeight * 5 / 4;		
-		libyuv::YUY2ToI420(src_yuy2, src_stride_yuy2, dst_y, dst_stride_y, dst_u, dst_stride_u, dst_v, dst_stride_v, m_tVidParam.nWidth, m_tVidParam.nHeight);
+
+		if(m_tVidParam.nColorFormat == COLOR_FormatYUY2)
+		{
+			int src_stride_yuy2 = m_tVidParam.nWidth * 2;		
+			libyuv::YUY2ToI420(src_yuy2, src_stride_yuy2, dst_y, dst_stride_y, dst_u, dst_stride_u, dst_v, dst_stride_v, m_tVidParam.nWidth, m_tVidParam.nHeight);
+		}
+		else if(m_tVidParam.nColorFormat == COLOR_FormatRGB24)
+		{
+			int src_stride_rgb24 = m_tVidParam.nWidth * 3;	
+			if (src_yuy2 != NULL)
+			{
+				int nRet = libyuv::RGB24ToI420(src_yuy2, src_stride_rgb24, dst_y, dst_stride_y, dst_u, dst_stride_u, dst_v, dst_stride_v, m_tVidParam.nWidth, m_tVidParam.nHeight);
+				if (nRet == 0)
+				{
+					if (m_tVidParam.pYUVBuf != NULL)
+					{
+						TRACE("width:%d, height:%d\n", m_tVidParam.nWidth, m_tVidParam.nHeight);
+			//			fwrite(m_tVidParam.pYUVBuf, m_tVidParam.nWidth * m_tVidParam.nHeight * 3 / 2, 1, fp);
+						TRACE(".................................................1\n");
+					}
+
+				}
+			}
+
+
+		}
 
 	}
 	else

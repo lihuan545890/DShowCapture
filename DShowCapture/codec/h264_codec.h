@@ -1,6 +1,5 @@
 #ifndef _H264_CODEC_H_
 #define _H264_CODEC_H_
-#pragma warning( disable : 4996)
 
 extern "C"{
 	#include "libavcodec/avcodec.h"
