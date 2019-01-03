@@ -444,6 +444,9 @@
     <ClInclude Include="include\semaphore.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\Mp4Record.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DShowCapture.cpp">
@@ -465,6 +468,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\framequeue.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mp4Record.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

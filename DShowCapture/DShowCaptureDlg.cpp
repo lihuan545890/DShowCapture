@@ -54,6 +54,7 @@ CDShowCaptureDlg::CDShowCaptureDlg(CWnd* pParent /*=NULL*/)
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_bInit = FALSE;
 	m_bIsVideoOpen = FALSE;
+	m_bIsRecord = FALSE;
 }
 
 void CDShowCaptureDlg::DoDataExchange(CDataExchange* pDX)
@@ -111,6 +112,7 @@ BOOL CDShowCaptureDlg::OnInitDialog()
 	// TODO:  在此添加额外的初始化代码
 
 	m_pVideoCapture =new CVideoCapture();
+	m_pMp4Record = new Mp4Record();
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -174,6 +176,42 @@ void CDShowCaptureDlg::OnBnClickedButtonPushstream()
 void CDShowCaptureDlg::OnBnClickedButtonRecord()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	if (!m_bInit)
+	{
+		MessageBox(_T("请先初始化！"), _T("提示"));
+		return;
+	}
+
+	if(m_bIsRecord == FALSE)
+	{
+		m_bIsRecord = TRUE;
+		CTime time = CTime::GetCurrentTime();	
+		CString szTime = time.Format("%Y%m%d_%H%M%S");
+		CString filename =  _T("");
+		CString filepath = _T("D:\\Record");
+//		char strFilename[32]={0};
+//		strpy(strFilename, )
+		filename.Format(_T("%s\\%s.mp4"), filepath, szTime);
+		RECORD_PARAMS rParams;
+		rParams.stVidParams.nWidth = m_nWidth;
+		rParams.stVidParams.nHeight = m_nHeight;
+		rParams.stVidParams.nBitRate = 1024 * 1000;
+		rParams.stVidParams.nFrameRate = 30;
+		rParams.stAudParams.nBitRate = 64000;
+		rParams.stAudParams.nSampleRate = 96000;
+		USES_CONVERSION;
+		int nRet = m_pMp4Record->InitRecord(T2A(filename), rParams);
+
+		nRet = m_pMp4Record->StartRecord(&m_stVideoQueue, &m_stAudioQueue);
+		SetDlgItemText(IDC_BUTTON_RECORD, _T("停止"));
+
+	}
+	else
+	{
+		m_bIsRecord = FALSE;
+		int nRet = m_pMp4Record->StopRecord();
+		SetDlgItemText(IDC_BUTTON_RECORD, _T("录像"));
+	}
 }
 
 
@@ -223,17 +261,18 @@ void CDShowCaptureDlg::OnBnClickedButtonCapture()
 	for (int i = 0; i < m_arrCamResolutionArr.GetSize(); i++)
 	{
 		CamResolutionInfo camInfo = m_arrCamResolutionArr.GetAt(i);
-	//	TRACE("nWidth:%d, nSetWidth:%d, nHeight:%d, nSetHeight:%d\n", camInfo.nWidth, nSetWidth, camInfo.nHeight, nSetHeight);
+	//	TRACE("nWidth:%d, nHeight:%d, lSampleRate:%ld\n", camInfo.nWidth, camInfo.nHeight, camInfo.lSampleRate);
 		if (camInfo.nWidth = nSetWidth && camInfo.nHeight == nSetHeight)
 		{
-	//		TRACE("selected index: %d\n", nResolutionIndex);
+			TRACE("selected lSampleRate: %d\n", camInfo.lSampleRate);
+			m_nSampleRate = camInfo.lSampleRate;
 			nResolutionIndex = camInfo.nResolutionIndex;
 			break;
 		}
 	}
 	m_nWidth = nSetWidth;
 	m_nHeight = nSetHeight;
-
+	
 	HWND h_wnd = GetDlgItem(IDC_STATIC_PREVIEW)->m_hWnd;
 	m_pVideoCapture->StartCapture(nResolutionIndex, h_wnd, m_nWidth, m_nHeight);
 
@@ -322,7 +361,13 @@ void CDShowCaptureDlg::OnBnClickedButtonInit()
 		return;
 	}
 
-	m_pVideoCapture->InitCapture(strVidDevName, strAudDevName);
+	frame_queue_init(&m_stVideoQueue);
+	frame_queue_start(&m_stVideoQueue);
+
+	frame_queue_init(&m_stAudioQueue);
+	frame_queue_start(&m_stAudioQueue);
+
+	m_pVideoCapture->InitCapture(strVidDevName, strAudDevName, &m_stVideoQueue, &m_stAudioQueue);
 
 	ASCamResolutionInfoArray VidResolution;
 	m_pVideoCapture->GetVideoResolution(VidResolution);
@@ -330,7 +375,7 @@ void CDShowCaptureDlg::OnBnClickedButtonInit()
 	{
 		CamResolutionInfo sVidResInfo = VidResolution.GetAt(i);
 		CString strFormat = _T("");
-		strFormat.Format(_T("%d * %d , %s"), sVidResInfo.nWidth, sVidResInfo.nHeight, sVidResInfo.strSubType);
+		strFormat.Format(_T("%d * %d , %s, 采样率:%ld"), sVidResInfo.nWidth, sVidResInfo.nHeight, sVidResInfo.strSubType, sVidResInfo.lSampleRate);
 		m_cbxVideoResList.AddString(strFormat);
 	}
 

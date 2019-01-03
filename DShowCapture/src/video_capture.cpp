@@ -14,7 +14,7 @@ CVideoCapture::~CVideoCapture()
 
 }
 
-bool CVideoCapture::InitCapture(CString VidDevName, CString AudDevName)
+bool CVideoCapture::InitCapture(CString VidDevName, CString AudDevName, FrameQueue* video_queue, FrameQueue* audio_queue)
 {
 	//选择设备，并获取Video Capture Filter
 	CreateVideoFilter(VidDevName, &m_pVideoFilter);
@@ -87,6 +87,9 @@ bool CVideoCapture::InitCapture(CString VidDevName, CString AudDevName)
 		return false;
 	}
 
+	m_videoCB.m_pVQueue = video_queue;
+	m_audioCB.m_pAQueue = audio_queue;
+
 	return true;
 }
 
@@ -150,7 +153,7 @@ bool CVideoCapture::StartCapture(int index, HWND hwnd, int width, int height)
 	pAudioConfig->GetStreamCaps(0, &audiPmt, (BYTE*)&ascc);
 
 	WAVEFORMATEX *pVih = (WAVEFORMATEX*)audiPmt->pbFormat;
-	//pVih->nSamplesPerSec = 4096;
+//	pVih->nSamplesPerSec = 44100;
 	//这里获取到音频采样率、通道数
 	//m_audioCB.m_nChannels = pVih->nChannels;
 	//m_audioCB.m_nSamplesPerSec = pVih->nSamplesPerSec;
@@ -162,11 +165,12 @@ bool CVideoCapture::StartCapture(int index, HWND hwnd, int width, int height)
 //	m_wBitsPerSample = pVih->wBitsPerSample;
 	//----------------
 
-	//audiPmt->cbFormat = sizeof(WAVEFORMATEX);
-	//audiPmt->pbFormat = (BYTE*)pVih;
+	audiPmt->cbFormat = sizeof(WAVEFORMATEX);
+	audiPmt->pbFormat = (BYTE*)pVih;
 	audiPmt->majortype = MEDIATYPE_Audio;//MEDIATYPE_Video
 	audiPmt->subtype = MEDIASUBTYPE_PCM;//MEDIASUBTYPE_RGB24
 	audiPmt->formattype = FORMAT_WaveFormatEx;//视频采集时没设置这一项
+
 
 	pAudioConfig->SetFormat(audiPmt);
 	hr = m_pAudioGrabber->SetMediaType(audiPmt);
@@ -472,6 +476,7 @@ void CVideoCapture::GetVideoResolution(ASCamResolutionInfoArray &VidResolution)
 							camInfo.nResolutionIndex = iFormat;
 							camInfo.nWidth = lWidth;
 							camInfo.nHeight = lHeight;
+							camInfo.lSampleRate = pmtConfig->lSampleSize;
 						
 
 							CString strSubType = _T("");
@@ -525,6 +530,7 @@ void CVideoCapture::GetVideoResolution(ASCamResolutionInfoArray &VidResolution)
 							}
 
 							camInfo.strSubType = strSubType;
+	
 							VidResolution.Add(camInfo);
 
 						}

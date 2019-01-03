@@ -1,5 +1,6 @@
 #pragma once
 #include "qedit.h"
+#include "framequeue.h"
 
 #define COLOR_FormatYUY2 0
 #define COLOR_FormatRGB24 1
@@ -10,7 +11,7 @@ typedef struct
 	int nHeight;
 	int nColorFormat;
 	unsigned char *pYUVBuf;
-}VIDEO_PARAM;
+}VID_PARAM;
 
 class CSampleGrabberCB :
 	public ISampleGrabberCB
@@ -29,7 +30,9 @@ public:
 public:
 	BOOL m_bBeginEncode;
 	int  m_nMediaType;
-	VIDEO_PARAM m_tVidParam;
+	VID_PARAM m_tVidParam;
 
+	FrameQueue *m_pVQueue;
+	FrameQueue *m_pAQueue;
 };
 

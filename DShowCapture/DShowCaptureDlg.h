@@ -5,7 +5,8 @@
 #pragma once
 
 #include "video_capture.h"
-
+#include "Mp4Record.h"
+#include "framequeue.h"
 // CDShowCaptureDlg 对话框
 class CDShowCaptureDlg : public CDialogEx
 {
@@ -20,6 +21,7 @@ public:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
 
 	CVideoCapture *m_pVideoCapture;
+	Mp4Record *m_pMp4Record;
 	CComboBox m_cbxVideoDevList;
 	CComboBox m_cbxAudioDevList;
 	CComboBox m_cbxVideoResList;
@@ -29,9 +31,14 @@ public:
 
 	BOOL m_bInit;
 	BOOL m_bIsVideoOpen;
+	BOOL m_bIsRecord;
 
 	int m_nWidth;
 	int m_nHeight;
+
+	int m_nSampleRate;
+	FrameQueue m_stVideoQueue;
+	FrameQueue m_stAudioQueue;	
 // 实现
 protected:
 	HICON m_hIcon;

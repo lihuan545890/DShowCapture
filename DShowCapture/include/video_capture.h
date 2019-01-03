@@ -73,7 +73,7 @@ struct CamResolutionInfo
 	int nHeight;			//分辨率高
 	int nResolutionIndex;	//分辨率序号
 	CString strSubType;     //视频子类型
-
+    long lSampleRate;
 	CamResolutionInfo()
 	{
 		nWidth = 640;
@@ -93,6 +93,7 @@ struct CamResolutionInfo
 		nHeight = other.nHeight;
 		nResolutionIndex = other.nResolutionIndex;
 		strSubType = other.strSubType;
+		lSampleRate = other.lSampleRate;
 		return *this;
 	};
 };
@@ -107,7 +108,7 @@ public:
 	void ListVideoCaptureDevices(ASImgDeviceInfoArray &VidDevInfo);
 	void ListAudioCaptureDevices(ASImgDeviceInfoArray &VidDevInfo);
 	void GetVideoResolution(ASCamResolutionInfoArray &VidResolution);
-	bool InitCapture(CString AudDevName, CString VidDevName);
+	bool InitCapture(CString AudDevName, CString VidDevName, FrameQueue *video_queue, FrameQueue *audio_queue);
 	bool StartCapture(int index, HWND hwnd, int width, int height);
 	bool StopCapture();
 

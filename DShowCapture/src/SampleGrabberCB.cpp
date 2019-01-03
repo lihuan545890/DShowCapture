@@ -39,8 +39,8 @@ HRESULT STDMETHODCALLTYPE CSampleGrabberCB::SampleCB(double SampleTime, IMediaSa
 	return 0;
 }
  
-FILE *fp = fopen("d:\\yuv\\test.yuv", "wb");
-//FILE *fp1 = fopen("d:\\yuv\\test.pcm", "wb");
+//FILE *fp = fopen("d:\\yuv\\test.yuv", "wb");
+FILE *fp1 = fopen("d:\\yuv\\test.pcm", "wb");
 HRESULT STDMETHODCALLTYPE CSampleGrabberCB::BufferCB(double SampleTime, BYTE *pBuffer, long BufferLen)
 {
 
@@ -77,9 +77,11 @@ HRESULT STDMETHODCALLTYPE CSampleGrabberCB::BufferCB(double SampleTime, BYTE *pB
 				{
 					if (m_tVidParam.pYUVBuf != NULL)
 					{
-						TRACE("width:%d, height:%d\n", m_tVidParam.nWidth, m_tVidParam.nHeight);
-			//			fwrite(m_tVidParam.pYUVBuf, m_tVidParam.nWidth * m_tVidParam.nHeight * 3 / 2, 1, fp);
-						TRACE(".................................................1\n");
+						StreamBuf buf;
+						buf.frame = m_tVidParam.pYUVBuf;
+						buf.bufsize = m_tVidParam.nWidth * m_tVidParam.nHeight * 3 / 2;
+
+					    frame_queue_put(m_pVQueue, &buf);
 					}
 
 				}
@@ -92,30 +94,11 @@ HRESULT STDMETHODCALLTYPE CSampleGrabberCB::BufferCB(double SampleTime, BYTE *pB
 	else
 	{
 	//	fwrite(pBuffer, BufferLen, 1, fp1);
-	}
-
-
-	if (m_bBeginEncode)
-	{
-		//timeb curTime;
-		//ftime(&curTime);
-		
-		BYTE* pByte = new BYTE[BufferLen];
-		memcpy(pByte, pBuffer, BufferLen);
-		/*
-		GrabDataInfo sData;
-		sData.pData = pByte;
-		sData.nDataSize = BufferLen;
-		sData.dSampleTime = SampleTime; //curTime.time + ((double)(curTime.millitm) / 1000.0);
-		sData.nType = 0;
-
-		theApp.m_mxGlobalMutex.Lock();
-		theApp.m_arrGrabData.Add(sData);
-		theApp.m_mxGlobalMutex.Unlock();
-		
-		CString str;
-		str.Format(_T("\n Video--BufferLen:%ld, SampleTime:%f "), BufferLen, sData.dSampleTime);
-		OutputDebugString(str);*/
+	//TRACE("Audio sample size: %d\n ", BufferLen);
+		StreamBuf buf;
+		buf.frame = pBuffer;
+		buf.bufsize = BufferLen;
+		frame_queue_put(m_pAQueue, &buf);
 	}
 
 	return 0;

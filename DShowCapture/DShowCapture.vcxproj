@@ -244,6 +244,7 @@
     <ClInclude Include="DShowCapture.h" />
     <ClInclude Include="DShowCaptureDlg.h" />
     <ClInclude Include="include\framequeue.h" />
+    <ClInclude Include="include\Mp4Record.h" />
     <ClInclude Include="include\pthread.h" />
     <ClInclude Include="include\SampleGrabberCB.h" />
     <ClInclude Include="include\sched.h" />
@@ -262,6 +263,9 @@
     <ClCompile Include="DShowCapture.cpp" />
     <ClCompile Include="DShowCaptureDlg.cpp" />
     <ClCompile Include="src\framequeue.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Mp4Record.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\SampleGrabberCB.cpp" />
