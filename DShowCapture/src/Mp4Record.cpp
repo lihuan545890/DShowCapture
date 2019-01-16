@@ -11,7 +11,7 @@ Mp4Record::~ Mp4Record()
 	m_bStart = false;
 }
 
-int Mp4Record::InitRecord(const char * filename, RECORD_PARAMS params)
+int Mp4Record::InitRecord(const char * filename, ENCODE_PARAMS params)
 {
 
 	if(filename == NULL)
@@ -39,8 +39,8 @@ int Mp4Record::InitRecord(const char * filename, RECORD_PARAMS params)
 	pVideoCodecCtx->gop_size = params.stVidParams.nFrameRate;	
 	pVideoCodecCtx->max_b_frames = 1;
 	
-	if (pFormatCtx->oformat->flags & AVFMT_GLOBALHEADER)
-		pVideoCodecCtx->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
+	//if (pFormatCtx->oformat->flags & AVFMT_GLOBALHEADER)
+	//	pVideoCodecCtx->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
 
 	av_opt_set(pVideoCodecCtx->priv_data, "preset", "ultrafast", 0);
 	av_opt_set(pVideoCodecCtx->priv_data, "tune", "zerolatency", 0);	
@@ -75,9 +75,11 @@ int Mp4Record::InitRecord(const char * filename, RECORD_PARAMS params)
 
 	pAudioCodecCtx = avcodec_alloc_context3(pAudioCodec);
 	pAudioCodecCtx->bit_rate = params.stAudParams.nBitRate;	
+	pAudioCodecCtx->codec_type = AVMEDIA_TYPE_AUDIO;
+	pAudioCodecCtx->sample_fmt = AV_SAMPLE_FMT_S16;
 	pAudioCodecCtx->sample_rate = 44100;
-	pAudioCodecCtx->channels = av_get_channel_layout_nb_channels(pAudioCodecCtx->channels);
-	pAudioCodecCtx->channel_layout = AV_CH_LAYOUT_MONO;
+	pAudioCodecCtx->channels = 2;//av_get_channel_layout_nb_channels(pAudioCodecCtx->channels);
+	pAudioCodecCtx->channel_layout = AV_CH_LAYOUT_STEREO;
 	pAudioCodecCtx->sample_fmt = pAudioCodec->sample_fmts ? pAudioCodec->sample_fmts[0] : AV_SAMPLE_FMT_FLTP;
 	pAudioCodecCtx->strict_std_compliance = FF_COMPLIANCE_EXPERIMENTAL;
 	int nRet=avcodec_open2(pAudioCodecCtx, pAudioCodec, NULL) ;
@@ -97,13 +99,6 @@ int Mp4Record::InitRecord(const char * filename, RECORD_PARAMS params)
 	pAudioStream->time_base.den = pAudioCodecCtx->sample_rate;
 	pAudioStream->codec = pAudioCodecCtx;	
 	pFramePCM  = av_frame_alloc();	
-	int size = av_samples_get_buffer_size(NULL,pAudioCodecCtx->channels,
-			pAudioCodecCtx->frame_size, pAudioCodecCtx->sample_fmt,0);
-
-	uint8_t *frame_buf = (uint8_t *)av_malloc(size);
-	memset(frame_buf, 0, size);
-	avcodec_fill_audio_frame(pFramePCM, pAudioCodecCtx->channels, pAudioCodecCtx->sample_fmt, (const uint8_t *)frame_buf, size, 0);
-
 
 	if (avio_open(&pFormatCtx->pb, filename, AVIO_FLAG_READ_WRITE) < 0){
 		TRACE("avio_open encoder failed!\n");		
@@ -125,7 +120,7 @@ int Mp4Record::StartRecord(FrameQueue *video_queue, FrameQueue *audio_queue)
 	m_stAQueue = audio_queue;
 
 	pthread_create(&m_RecVidThrID, NULL, RecordVideoThread, this);
-	pthread_create(&m_RecAudThrID, NULL, RecordAudioThread, this);
+//	pthread_create(&m_RecAudThrID, NULL, RecordAudioThread, this);
 
 	return 0;
 }
@@ -140,12 +135,12 @@ int Mp4Record::StopRecord()
 	{
 		avcodec_close(pVideoStream->codec);
 	}
-
+/*
 	if(pAudioStream)
 	{
 		avcodec_close(pAudioStream->codec);
 	}
-	
+*/	
 	avio_close(pFormatCtx->pb);
 	avformat_free_context(pFormatCtx);
 
@@ -199,7 +194,7 @@ void *RecordVideoThread(void *param)
 				pMp4Record->stVideoPkt.duration = av_rescale_q(calc_duration, time_base_q, time_base);
 				pMp4Record->stVideoPkt.pos = -1;
 		
-				nRet = av_write_frame(pMp4Record->pFormatCtx, &pMp4Record->stVideoPkt);	
+				nRet = av_write_frame(pMp4Record->pFormatCtx, &pMp4Record->stVideoPkt);				
 				av_free_packet(&pMp4Record->stVideoPkt);				
 			}
 			
@@ -221,29 +216,79 @@ void *RecordAudioThread(void *param)
 	int nRet;
 	int nGotFrame = 0;	
 	Mp4Record *pMp4Record = (Mp4Record *)param;
+	int nCount = 0;
 	while(1)
 	{
 		if(pMp4Record->m_bStart)
 		{
-
+			pthread_mutex_lock(&pMp4Record->m_mutex);
 			StreamBuf buf;
 			int nRet = frame_queue_get(pMp4Record->m_stAQueue, &buf, 1);
-//			fwrite(buf.frame, buf.bufsize, 1, fp1);
 
 			pMp4Record->pFramePCM->nb_samples = pMp4Record->pAudioCodecCtx->frame_size;
 			
 			pMp4Record->pFramePCM->format = pMp4Record->pAudioCodecCtx->sample_fmt;
 			pMp4Record->pFramePCM->channel_layout = pMp4Record->pAudioCodecCtx->channel_layout;
 			pMp4Record->pFramePCM->sample_rate = pMp4Record->pAudioCodecCtx->sample_rate;
-/*
-			int size = av_samples_get_buffer_size(NULL,pMp4Record->pAudioCodecCtx->channels,
-					pMp4Record->pAudioCodecCtx->frame_size,pMp4Record->pAudioCodecCtx->sample_fmt,0);
+
+
+
+			int nReadSize = 0;
+			int size = av_samples_get_buffer_size(NULL, pMp4Record->pAudioCodecCtx->channels,
+				pMp4Record->pAudioCodecCtx->frame_size, pMp4Record->pAudioCodecCtx->sample_fmt, 1);
 
 			uint8_t *frame_buf = (uint8_t *)av_malloc(size);
 			memset(frame_buf, 0, size);
-			avcodec_fill_audio_frame(pMp4Record->pFramePCM, pMp4Record->pAudioCodecCtx->channels, pMp4Record->pAudioCodecCtx->sample_fmt, (const uint8_t *)frame_buf, size, 0);
-*/
-			pMp4Record->pFramePCM->data[0] = buf.frame;
+			avcodec_fill_audio_frame(pMp4Record->pFramePCM, pMp4Record->pAudioCodecCtx->channels, pMp4Record->pAudioCodecCtx->sample_fmt, (const uint8_t *)frame_buf, size, 1);
+			while(nReadSize < buf.bufsize)
+			{
+
+
+				memcpy(frame_buf, buf.frame + nReadSize, size);
+				nReadSize += size;
+				pMp4Record->pFramePCM->data[0] = frame_buf;
+				
+				pMp4Record->stAudiopkt.data = NULL;
+				pMp4Record->stAudiopkt.size = 0;
+				av_init_packet(&pMp4Record->stAudiopkt);
+		
+				pMp4Record->nb_samples += pMp4Record->pFramePCM->nb_samples;
+		//		pMp4Record->pFramePCM->pts = (nCount++) * 100;
+				nRet = avcodec_encode_audio2(pMp4Record->pAudioCodecCtx, &pMp4Record->stAudiopkt, pMp4Record->pFramePCM, &nGotFrame);
+		//		TRACE("---------------nGotFrame: %d, nRet: %d, bufsize:%d\n", nGotFrame,nRet, buf.bufsize);
+				if (nGotFrame)
+				{
+
+					pMp4Record->stAudiopkt.stream_index = pMp4Record->pAudioStream->index;
+					AVRational time_base = pMp4Record->pFormatCtx->streams[pMp4Record->pAudioStream->index]->time_base;
+
+					AVRational r_framerate1 = {pMp4Record->pAudioCodecCtx->sample_rate, 1 };
+					AVRational time_base_q =  {1, AV_TIME_BASE};
+
+					double calc_duration = (double)(AV_TIME_BASE)*(1 / av_q2d(r_framerate1));
+
+					int64_t timett = av_gettime();
+					int64_t now_time = timett - pMp4Record->startTime;
+					pMp4Record->stAudiopkt.pts = av_rescale_q(now_time, time_base_q, time_base);
+					pMp4Record->stAudiopkt.dts=pMp4Record->stAudiopkt.pts;
+					pMp4Record->stAudiopkt.duration = av_rescale_q(calc_duration, time_base_q, time_base);
+			
+	
+					nRet = av_write_frame(pMp4Record->pFormatCtx, &pMp4Record->stAudiopkt);
+					av_free_packet(&pMp4Record->stAudiopkt);
+					TRACE("---------------av_write_frame audio nRet: %d\n",nRet);	
+				
+					
+				}
+				
+				
+			}
+
+			pthread_mutex_unlock(&pMp4Record->m_mutex);
+
+/*
+			
+			pMp4Record->pFramePCM->data[0] = frame_buf;
 			
 			pMp4Record->stAudiopkt.data = NULL;
 			pMp4Record->stAudiopkt.size = 0;
@@ -252,8 +297,8 @@ void *RecordAudioThread(void *param)
 			pMp4Record->nb_samples += pMp4Record->pFramePCM->nb_samples;
 			nRet = avcodec_encode_audio2(pMp4Record->pAudioCodecCtx, &pMp4Record->stAudiopkt, pMp4Record->pFramePCM, &nGotFrame);
 			TRACE("---------------nGotFrame: %d, nRet: %d, bufsize:%d\n", nGotFrame,nRet, buf.bufsize);	
-	//		av_frame_free(&pMp4Record->pFramePCM);
-	/*			
+
+			
 			if(nRet == 0)//if (nGotFrame)
 			{
 

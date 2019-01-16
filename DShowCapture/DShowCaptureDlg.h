@@ -6,7 +6,8 @@
 
 #include "video_capture.h"
 #include "Mp4Record.h"
-#include "framequeue.h"
+#include "RtspServerInstance.h"
+//#include "framequeue.h"
 // CDShowCaptureDlg ¶Ô»°¿ò
 class CDShowCaptureDlg : public CDialogEx
 {
@@ -22,6 +23,7 @@ public:
 
 	CVideoCapture *m_pVideoCapture;
 	Mp4Record *m_pMp4Record;
+	RTSPServerInstance *m_pRtspServer;
 	CComboBox m_cbxVideoDevList;
 	CComboBox m_cbxAudioDevList;
 	CComboBox m_cbxVideoResList;
@@ -32,7 +34,8 @@ public:
 	BOOL m_bInit;
 	BOOL m_bIsVideoOpen;
 	BOOL m_bIsRecord;
-
+	BOOL m_bIsPush;
+	
 	int m_nWidth;
 	int m_nHeight;
 

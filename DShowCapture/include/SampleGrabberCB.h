@@ -1,7 +1,6 @@
 #pragma once
 #include "qedit.h"
 #include "framequeue.h"
-
 #define COLOR_FormatYUY2 0
 #define COLOR_FormatRGB24 1
 

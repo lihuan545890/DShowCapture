@@ -11,32 +11,12 @@ extern "C"{
 #include <pthread.h>
 #include <framequeue.h>
 
-typedef struct
-{
-	int nWidth;
-	int nHeight;
-	int nFrameRate;
-	int nBitRate;
-}VIDEO_PARAM;
-
-typedef struct
-{
-	int nSampleRate;
-	int nBitRate;
-}AUDIO_PARAM;
-
-typedef struct
-{
-	VIDEO_PARAM stVidParams;
-	AUDIO_PARAM stAudParams;
-}RECORD_PARAMS;
-
 class Mp4Record
 {
 	public:
 		Mp4Record();
 		~Mp4Record();
-		int InitRecord(const char* filename, RECORD_PARAMS params);
+		int InitRecord(const char* filename, ENCODE_PARAMS params);
 		int StartRecord(FrameQueue *video_queue, FrameQueue *audio_queue);
 		int StopRecord();
 

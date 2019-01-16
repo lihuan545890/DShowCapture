@@ -5,6 +5,26 @@
 extern "C" {
 #endif /* __cplusplus */
 
+typedef struct
+{
+	int nWidth;
+	int nHeight;
+	int nFrameRate;
+	int nBitRate;
+}VIDEO_PARAM;
+
+typedef struct
+{
+	int nSampleRate;
+	int nBitRate;
+}AUDIO_PARAM;
+
+typedef struct
+{
+	VIDEO_PARAM stVidParams;
+	AUDIO_PARAM stAudParams;
+}ENCODE_PARAMS;
+
 typedef struct StreamBuf{
     unsigned char *frame;
     int bufsize;	

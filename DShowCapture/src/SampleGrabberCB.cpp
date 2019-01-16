@@ -40,7 +40,7 @@ HRESULT STDMETHODCALLTYPE CSampleGrabberCB::SampleCB(double SampleTime, IMediaSa
 }
  
 //FILE *fp = fopen("d:\\yuv\\test.yuv", "wb");
-FILE *fp1 = fopen("d:\\yuv\\test.pcm", "wb");
+//FILE *fp1 = fopen("d:\\yuv\\test.pcm", "wb");
 HRESULT STDMETHODCALLTYPE CSampleGrabberCB::BufferCB(double SampleTime, BYTE *pBuffer, long BufferLen)
 {
 
@@ -65,7 +65,26 @@ HRESULT STDMETHODCALLTYPE CSampleGrabberCB::BufferCB(double SampleTime, BYTE *pB
 		if(m_tVidParam.nColorFormat == COLOR_FormatYUY2)
 		{
 			int src_stride_yuy2 = m_tVidParam.nWidth * 2;		
-			libyuv::YUY2ToI420(src_yuy2, src_stride_yuy2, dst_y, dst_stride_y, dst_u, dst_stride_u, dst_v, dst_stride_v, m_tVidParam.nWidth, m_tVidParam.nHeight);
+			int nRet = libyuv::YUY2ToI420(src_yuy2, src_stride_yuy2, dst_y, dst_stride_y, dst_u, dst_stride_u, dst_v, dst_stride_v, m_tVidParam.nWidth, m_tVidParam.nHeight);
+			if (nRet == 0)
+			{
+				if (m_tVidParam.pYUVBuf != NULL)
+				{
+					StreamBuf buf;
+					buf.frame = m_tVidParam.pYUVBuf;
+					buf.bufsize = m_tVidParam.nWidth * m_tVidParam.nHeight * 3 / 2;
+
+				    if(frame_queue_count(m_pVQueue) > 0)
+				    {
+						StreamBuf tmpBuf;
+					    frame_queue_get(m_pVQueue, &tmpBuf, 1);
+				    }
+
+				    frame_queue_put(m_pVQueue, &buf);
+				    
+				}
+
+			}			
 		}
 		else if(m_tVidParam.nColorFormat == COLOR_FormatRGB24)
 		{

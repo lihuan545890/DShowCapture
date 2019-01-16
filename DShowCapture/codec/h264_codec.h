@@ -15,7 +15,7 @@ class H264Encoder
 		H264Encoder();
 		~H264Encoder();
 		int InitEncode(int width, int height, int fps, int bitrate);
-		int Encode(unsigned char  *buf, int size);
+		int Encode(unsigned char  *src_buf, unsigned char  ** dst_buf);
 		int StopEncode();
 		
 	private:

@@ -55,6 +55,7 @@ CDShowCaptureDlg::CDShowCaptureDlg(CWnd* pParent /*=NULL*/)
 	m_bInit = FALSE;
 	m_bIsVideoOpen = FALSE;
 	m_bIsRecord = FALSE;
+	m_bIsPush = FALSE;
 }
 
 void CDShowCaptureDlg::DoDataExchange(CDataExchange* pDX)
@@ -113,7 +114,7 @@ BOOL CDShowCaptureDlg::OnInitDialog()
 
 	m_pVideoCapture =new CVideoCapture();
 	m_pMp4Record = new Mp4Record();
-
+	m_pRtspServer = new RTSPServerInstance();
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -170,6 +171,38 @@ HCURSOR CDShowCaptureDlg::OnQueryDragIcon()
 void CDShowCaptureDlg::OnBnClickedButtonPushstream()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	if (!m_bInit)
+	{
+		MessageBox(_T("请先初始化！"), _T("提示"));
+		return;
+	}	
+
+	if (!m_bIsVideoOpen)
+	{
+		MessageBox(_T("请打开采集！"), _T("提示"));
+		return;
+	}
+
+	if(m_bIsPush == FALSE)
+	{
+		ENCODE_PARAMS rParams;
+		rParams.stVidParams.nWidth = m_nWidth;
+		rParams.stVidParams.nHeight = m_nHeight;
+		rParams.stVidParams.nBitRate = 1024 * 1000;
+		rParams.stVidParams.nFrameRate = 30;
+		rParams.stAudParams.nBitRate = 64000;
+		rParams.stAudParams.nSampleRate = 96000;
+	
+		SetDlgItemText(IDC_BUTTON_PUSHSTREAM, _T("停止"));	
+		int nRet = m_pRtspServer->Start(rParams, &m_stVideoQueue, &m_stAudioQueue);
+		
+		m_bIsPush = TRUE;
+	}
+	else
+	{
+		SetDlgItemText(IDC_BUTTON_PUSHSTREAM, _T("推流"));	
+		m_bIsPush = FALSE;		
+	}
 }
 
 
@@ -179,6 +212,12 @@ void CDShowCaptureDlg::OnBnClickedButtonRecord()
 	if (!m_bInit)
 	{
 		MessageBox(_T("请先初始化！"), _T("提示"));
+		return;
+	}
+
+	if (!m_bIsVideoOpen)
+	{
+		MessageBox(_T("请打开采集！"), _T("提示"));
 		return;
 	}
 
@@ -192,7 +231,7 @@ void CDShowCaptureDlg::OnBnClickedButtonRecord()
 //		char strFilename[32]={0};
 //		strpy(strFilename, )
 		filename.Format(_T("%s\\%s.mp4"), filepath, szTime);
-		RECORD_PARAMS rParams;
+		ENCODE_PARAMS rParams;
 		rParams.stVidParams.nWidth = m_nWidth;
 		rParams.stVidParams.nHeight = m_nHeight;
 		rParams.stVidParams.nBitRate = 1024 * 1000;
