@@ -11,7 +11,7 @@ class RTSPServerInstance
 		RTSPServerInstance();
 		~RTSPServerInstance();
 		bool Start(ENCODE_PARAMS param, FrameQueue *vQueue, FrameQueue *aQueue);
-		bool StartServer(int nWidth, int nHeight, int nFps, FrameQueue *vQueue);
+		bool StartServer(int nWidth, int nHeight, int nFps, FrameQueue *vQueue, FrameQueue *aQueue);
 		bool Stop();
 		friend void *RTSPStartThread(void *param);
 
@@ -24,6 +24,7 @@ class RTSPServerInstance
 		int m_nHeight;
 		int m_nFps;
 		FrameQueue *m_vQueue;
+		FrameQueue *m_aQueue;
 };
 
 

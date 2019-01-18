@@ -981,6 +981,18 @@
     <ClInclude Include="rtsp\include\RtspServerInstance.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="rtsp\include\AACLiveFramedSource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="rtsp\include\AACLiveCaptureThread.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="rtsp\include\AACLiveServerMediaSubsession.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\aac_codec.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DShowCapture.cpp">
@@ -1017,6 +1029,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="rtsp\RtspServerInstance.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="rtsp\AACLiveCaptureThread.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="rtsp\AACLiveFramedSource.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="rtsp\AACLiveServerMediaSubsession.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="codec\aac_codec.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

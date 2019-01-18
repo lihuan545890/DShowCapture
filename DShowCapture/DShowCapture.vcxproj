@@ -111,6 +111,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="codec\aac_codec.h" />
     <ClInclude Include="codec\h264_codec.h" />
     <ClInclude Include="codec\include\libavcodec\ac3_parser.h" />
     <ClInclude Include="codec\include\libavcodec\adts_parser.h" />
@@ -251,6 +252,9 @@
     <ClInclude Include="include\semaphore.h" />
     <ClInclude Include="include\video_capture.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="rtsp\include\AACLiveCaptureThread.h" />
+    <ClInclude Include="rtsp\include\AACLiveFramedSource.h" />
+    <ClInclude Include="rtsp\include\AACLiveServerMediaSubsession.h" />
     <ClInclude Include="rtsp\include\BasicUsageEnvironment\include\BasicHashTable.hh" />
     <ClInclude Include="rtsp\include\BasicUsageEnvironment\include\BasicUsageEnvironment.hh" />
     <ClInclude Include="rtsp\include\BasicUsageEnvironment\include\BasicUsageEnvironment0.hh" />
@@ -434,12 +438,24 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="codec\aac_codec.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="codec\h264_codec.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="DShowCapture.cpp" />
     <ClCompile Include="DShowCaptureDlg.cpp" />
+    <ClCompile Include="rtsp\AACLiveCaptureThread.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="rtsp\AACLiveFramedSource.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="rtsp\AACLiveServerMediaSubsession.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="rtsp\H264LiveCaptureThread.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>

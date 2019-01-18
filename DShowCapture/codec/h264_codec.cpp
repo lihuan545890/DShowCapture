@@ -78,7 +78,6 @@ int H264Encoder::Encode(unsigned char  *src_buf, unsigned char  ** dst_buf)
 
 	if(enc_got_frame)
 	{
-		//memcpy(dst_buf, enc_pkt.data, enc_pkt.size);
 		*dst_buf = enc_pkt.data;
 		enc_size = enc_pkt.size;				
 //		av_free_packet(&enc_pkt);

@@ -1,7 +1,8 @@
 #include  <afx.h>  
 #include "RtspServerInstance.h"
 #include "H264LiveServerMediaSubsession.h"
-#define ACCESS_CONTROL
+#include "AACLiveServerMediaSubsession.h"
+//#define ACCESS_CONTROL
 
 RTSPServerInstance::RTSPServerInstance()
 	:m_rtspServer(NULL),
@@ -15,7 +16,7 @@ RTSPServerInstance::RTSPServerInstance()
 void *RTSPStartThread(void *param)
 {
 	RTSPServerInstance * pServer = (RTSPServerInstance*)param;
-	pServer->StartServer(pServer->m_nWidth, pServer->m_nHeight, pServer->m_nFps, pServer->m_vQueue);
+	pServer->StartServer(pServer->m_nWidth, pServer->m_nHeight, pServer->m_nFps, pServer->m_vQueue, pServer->m_aQueue);
 
 	return 0;
 }
@@ -25,7 +26,7 @@ RTSPServerInstance::~ RTSPServerInstance()
 
 }
 
-bool RTSPServerInstance::StartServer(int nWidth, int nHeight, int nFps, FrameQueue * vQueue)
+bool RTSPServerInstance::StartServer(int nWidth, int nHeight, int nFps, FrameQueue * vQueue, FrameQueue * aQueue)
 {
 	m_scheduler = BasicTaskScheduler::createNew();
 	if(!m_scheduler)
@@ -58,8 +59,10 @@ bool RTSPServerInstance::StartServer(int nWidth, int nHeight, int nFps, FrameQue
 	ServerMediaSession* sms = ServerMediaSession::createNew(*m_uEnv, "RTSPServer",
 			0, "Camera server, streamed by the LIVE555 Media Server");	
 
-	sms->addSubsession(H264LiveServerMediaSubsession::createNew(*m_uEnv,
-		 nWidth, nHeight, nFps, vQueue));
+//	sms->addSubsession(H264LiveServerMediaSubsession::createNew(*m_uEnv,
+//		 nWidth, nHeight, nFps, vQueue));
+
+	sms->addSubsession(AACLiveServerMediaSubsession::createNew(*m_uEnv, 44100, 64000, aQueue));
 	m_rtspServer->addServerMediaSession(sms);
 	char* url = m_rtspServer->rtspURL(sms);
 	TRACE("Play this Stream %d x %d fps:%d using the URL: \"%s\"",nWidth,  nHeight,  nFps, url);
@@ -77,6 +80,7 @@ bool RTSPServerInstance::Start(ENCODE_PARAMS param, FrameQueue *vQueue, FrameQue
 	m_nHeight = param.stVidParams.nHeight;
 	m_nFps = param.stVidParams.nFrameRate;
 	m_vQueue = vQueue;
+	m_aQueue = aQueue;
 	pthread_create(&m_RtspThrID, NULL, RTSPStartThread, this);
 
 	return true;
