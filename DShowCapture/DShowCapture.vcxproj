@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,14 +19,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
@@ -44,8 +44,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>.\bin</OutDir>
-    <LibraryPath>.\lib;$(LibraryPath);.\codec\lib;.\lib\DirectShow;.\rtsp\lib</LibraryPath>
-    <IncludePath>.\;.\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);.\include\DirectShow;.\codec\include;.\codec;.\rtsp;.\rtsp\include;.\rtsp\include\BasicUsageEnvironment\include;.\rtsp\include\liveMedia\include;.\rtsp\include\groupsock\include;.\rtsp\include\UsageEnvironment\include;$(IncludePath)</IncludePath>
+    <LibraryPath>.\lib;$(LibraryPath);.\codec\lib;.\lib\DirectShow;.\jrtp\lib</LibraryPath>
+    <IncludePath>.\;.\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);.\include\DirectShow;.\codec\include;.\codec;.\jrtp;.\jrtp\jrtplib;.\jrtp\jthread;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -244,6 +244,7 @@
     <ClInclude Include="codec\libyuv\video_common.h" />
     <ClInclude Include="DShowCapture.h" />
     <ClInclude Include="DShowCaptureDlg.h" />
+    <ClInclude Include="include\DirectDraw.h" />
     <ClInclude Include="include\framequeue.h" />
     <ClInclude Include="include\Mp4Record.h" />
     <ClInclude Include="include\pthread.h" />
@@ -251,188 +252,14 @@
     <ClInclude Include="include\sched.h" />
     <ClInclude Include="include\semaphore.h" />
     <ClInclude Include="include\video_capture.h" />
+    <ClInclude Include="jrtp\h263-1998.h" />
+    <ClInclude Include="jrtp\h264-rtp.h" />
+    <ClInclude Include="jrtp\h264frame.h" />
+    <ClInclude Include="jrtp\Is_H264KeyFrame.h" />
+    <ClInclude Include="jrtp\rtpframe.h" />
+    <ClInclude Include="jrtp\rtp_receiver.h" />
+    <ClInclude Include="jrtp\rtp_sender.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="rtsp\include\AACLiveCaptureThread.h" />
-    <ClInclude Include="rtsp\include\AACLiveFramedSource.h" />
-    <ClInclude Include="rtsp\include\AACLiveServerMediaSubsession.h" />
-    <ClInclude Include="rtsp\include\BasicUsageEnvironment\include\BasicHashTable.hh" />
-    <ClInclude Include="rtsp\include\BasicUsageEnvironment\include\BasicUsageEnvironment.hh" />
-    <ClInclude Include="rtsp\include\BasicUsageEnvironment\include\BasicUsageEnvironment0.hh" />
-    <ClInclude Include="rtsp\include\BasicUsageEnvironment\include\BasicUsageEnvironment_version.hh" />
-    <ClInclude Include="rtsp\include\BasicUsageEnvironment\include\DelayQueue.hh" />
-    <ClInclude Include="rtsp\include\BasicUsageEnvironment\include\HandlerSet.hh" />
-    <ClInclude Include="rtsp\include\groupsock\include\GroupEId.hh" />
-    <ClInclude Include="rtsp\include\groupsock\include\Groupsock.hh" />
-    <ClInclude Include="rtsp\include\groupsock\include\GroupsockHelper.hh" />
-    <ClInclude Include="rtsp\include\groupsock\include\groupsock_version.hh" />
-    <ClInclude Include="rtsp\include\groupsock\include\IOHandlers.hh" />
-    <ClInclude Include="rtsp\include\groupsock\include\NetAddress.hh" />
-    <ClInclude Include="rtsp\include\groupsock\include\NetCommon.h" />
-    <ClInclude Include="rtsp\include\groupsock\include\NetInterface.hh" />
-    <ClInclude Include="rtsp\include\groupsock\include\TunnelEncaps.hh" />
-    <ClInclude Include="rtsp\include\H264LiveCaptureThread.h" />
-    <ClInclude Include="rtsp\include\H264LiveFramedSource.h" />
-    <ClInclude Include="rtsp\include\H264LiveServerMediaSubsession.h" />
-    <ClInclude Include="rtsp\include\liveMedia\include\AC3AudioFileServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\AC3AudioRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\AC3AudioRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\AC3AudioStreamFramer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\ADTSAudioFileServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\ADTSAudioFileSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\AMRAudioFileServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\AMRAudioFileSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\AMRAudioFileSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\AMRAudioRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\AMRAudioRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\AMRAudioSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\AudioInputDevice.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\AudioRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\AVIFileSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\Base64.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\BasicUDPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\BasicUDPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\BitVector.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\ByteStreamFileSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\ByteStreamMemoryBufferSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\ByteStreamMultiFileSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\DeviceSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\DigestAuthentication.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\DVVideoFileServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\DVVideoRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\DVVideoRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\DVVideoStreamFramer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\FileServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\FileSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\FramedFileSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\FramedFilter.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\FramedSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\GenericMediaServer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\GSMAudioRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H261VideoRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H263plusVideoFileServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H263plusVideoRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H263plusVideoRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H263plusVideoStreamFramer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H264or5VideoFileSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H264or5VideoRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H264or5VideoStreamDiscreteFramer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H264or5VideoStreamFramer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H264VideoFileServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H264VideoFileSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H264VideoRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H264VideoRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H264VideoStreamDiscreteFramer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H264VideoStreamFramer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H265VideoFileServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H265VideoFileSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H265VideoRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H265VideoRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H265VideoStreamDiscreteFramer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\H265VideoStreamFramer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\InputFile.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\JPEGVideoRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\JPEGVideoRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\JPEGVideoSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\liveMedia.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\liveMedia_version.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\Locale.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MatroskaFile.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MatroskaFileServerDemux.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\Media.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MediaSession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MediaSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MediaSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MediaTranscodingTable.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MP3ADU.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MP3ADUinterleaving.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MP3ADURTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MP3ADURTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MP3ADUTranscoder.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MP3AudioFileServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MP3FileSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MP3Transcoder.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG1or2AudioRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG1or2AudioRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG1or2AudioStreamFramer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG1or2Demux.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG1or2DemuxedElementaryStream.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG1or2DemuxedServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG1or2FileServerDemux.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG1or2VideoFileServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG1or2VideoRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG1or2VideoRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG1or2VideoStreamDiscreteFramer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG1or2VideoStreamFramer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG2IndexFromTransportStream.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG2TransportFileServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG2TransportStreamAccumulator.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG2TransportStreamFramer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG2TransportStreamFromESSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG2TransportStreamFromPESSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG2TransportStreamIndexFile.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG2TransportStreamMultiplexor.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG2TransportStreamTrickModeFilter.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG2TransportUDPServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG4ESVideoRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG4ESVideoRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG4GenericRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG4GenericRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG4LATMAudioRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG4LATMAudioRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG4VideoFileServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG4VideoStreamDiscreteFramer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEG4VideoStreamFramer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MPEGVideoStreamFramer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MultiFramedRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\MultiFramedRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\OggFile.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\OggFileServerDemux.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\OggFileSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\OnDemandServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\ourMD5.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\OutputFile.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\PassiveServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\ProxyServerMediaSession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\QCELPAudioRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\QuickTimeFileSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\QuickTimeGenericRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\RawVideoRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\RawVideoRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\RTCP.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\RTPInterface.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\RTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\RTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\RTSPClient.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\RTSPCommon.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\RTSPRegisterSender.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\RTSPServer.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\RTSPServerSupportingHTTPStreaming.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\ServerMediaSession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\SimpleRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\SimpleRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\SIPClient.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\StreamReplicator.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\T140TextRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\TCPStreamSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\TextRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\TheoraVideoRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\TheoraVideoRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\uLawAudioFilter.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\VideoRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\VorbisAudioRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\VorbisAudioRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\VP8VideoRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\VP8VideoRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\VP9VideoRTPSink.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\VP9VideoRTPSource.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\WAVAudioFileServerMediaSubsession.hh" />
-    <ClInclude Include="rtsp\include\liveMedia\include\WAVAudioFileSource.hh" />
-    <ClInclude Include="rtsp\include\RtspServerInstance.h" />
-    <ClInclude Include="rtsp\include\UsageEnvironment\include\Boolean.hh" />
-    <ClInclude Include="rtsp\include\UsageEnvironment\include\HashTable.hh" />
-    <ClInclude Include="rtsp\include\UsageEnvironment\include\strDup.hh" />
-    <ClInclude Include="rtsp\include\UsageEnvironment\include\UsageEnvironment.hh" />
-    <ClInclude Include="rtsp\include\UsageEnvironment\include\UsageEnvironment_version.hh" />
     <ClInclude Include="src\video_capture\video_capture.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -447,27 +274,22 @@
     </ClCompile>
     <ClCompile Include="DShowCapture.cpp" />
     <ClCompile Include="DShowCaptureDlg.cpp" />
-    <ClCompile Include="rtsp\AACLiveCaptureThread.cpp">
+    <ClCompile Include="jrtp\h264-rtp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="rtsp\AACLiveFramedSource.cpp">
+    <ClCompile Include="jrtp\h264frame.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="rtsp\AACLiveServerMediaSubsession.cpp">
+    <ClCompile Include="jrtp\Is_H264KeyFrame.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="rtsp\H264LiveCaptureThread.cpp">
+    <ClCompile Include="jrtp\rtp_receiver.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="rtsp\H264LiveFramedSource.cpp">
+    <ClCompile Include="jrtp\rtp_sender.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="rtsp\H264LiveServerMediaSubsession.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="rtsp\RtspServerInstance.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="src\DirectDraw.cpp" />
     <ClCompile Include="src\framequeue.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -495,6 +317,7 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="codec\lib\avcodec.lib" />
+    <Library Include="jrtp\lib\libjrtp.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -31,8 +31,8 @@ class H264Decoder
 	public:
 		H264Decoder();
 		~H264Decoder();
-		int InitDecode();
-		int Decode(unsigned char  *buf, int size);
+		int InitDecode(int width, int height, int framerate);
+		int Decode(unsigned char *src_buf, int size, unsigned char *dst_buf);
 		int StopDecode();
 		
 	private:
@@ -40,6 +40,6 @@ class H264Decoder
 		AVCodecContext* pCodecCtx;
 		AVPacket enc_pkt;
 		AVFrame *pFrameYUV;	
-	
+
 };
 #endif

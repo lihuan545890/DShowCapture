@@ -1,0 +1,76 @@
+﻿  jthread.cpp
+  jmutex.cpp
+  rtpudpv6transmitter.cpp
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtpudpv6transmitter.cpp(425): warning C4996: 'gethostbyaddr': Use getnameinfo() or GetNameInfoW() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\8.1\include\um\winsock2.h(2216): note: 参见“gethostbyaddr”的声明
+  rtpudpv4transmitter.cpp
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtpudpv4transmitter.cpp(652): warning C4996: 'gethostbyaddr': Use getnameinfo() or GetNameInfoW() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\8.1\include\um\winsock2.h(2216): note: 参见“gethostbyaddr”的声明
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtpudpv4transmitter.cpp(1912): warning C4996: 'gethostbyname': Use getaddrinfo() or GetAddrInfoW() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\8.1\include\um\winsock2.h(2238): note: 参见“gethostbyname”的声明
+  rtptimeutilities.cpp
+  rtptcptransmitter.cpp
+  rtptcpaddress.cpp
+  rtpsources.cpp
+  rtpsourcedata.cpp
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtpsourcedata.cpp(219): warning C4146: 一元负运算符应用于无符号类型，结果仍为无符号类型
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtpsourcedata.cpp(233): warning C4146: 一元负运算符应用于无符号类型，结果仍为无符号类型
+  rtpsessionsources.cpp
+  rtpsessionparams.cpp
+  rtpsession.cpp
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtpsession.cpp(748): warning C4267: “参数”: 从“size_t”转换到“uint8_t”，可能丢失数据
+  rtpsecuresession.cpp
+  rtprandomurandom.cpp
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtprandomurandom.cpp(57): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: 参见“fopen”的声明
+  rtprandomrands.cpp
+  rtprandomrand48.cpp
+  rtprandom.cpp
+  rtppollthread.cpp
+  rtppacketbuilder.cpp
+  rtppacket.cpp
+  正在生成代码...
+  正在编译...
+  rtplibraryversion.cpp
+  rtpipv6destination.cpp
+  rtpipv6address.cpp
+  rtpipv4destination.cpp
+  rtpipv4address.cpp
+  rtpinternalsourcedata.cpp
+  rtpexternaltransmitter.cpp
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtpexternaltransmitter.cpp(228): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(119): note: 参见“strcpy”的声明
+  rtperrors.cpp
+  rtpdebug.cpp
+  rtpcollisionlist.cpp
+  rtpbyteaddress.cpp
+  rtpabortdescriptors.cpp
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtpabortdescriptors.cpp(113): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\8.1\include\um\winsock2.h(1850): note: 参见“inet_addr”的声明
+  rtcpsrpacket.cpp
+  rtcpsdespacket.cpp
+  rtcpsdesinfo.cpp
+  rtcpscheduler.cpp
+  rtcprrpacket.cpp
+  rtcppacketbuilder.cpp
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtcppacketbuilder.cpp(180): warning C4267: “参数”: 从“size_t”转换到“uint8_t”，可能丢失数据
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtcppacketbuilder.cpp(519): warning C4267: “参数”: 从“size_t”转换到“uint8_t”，可能丢失数据
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtcppacketbuilder.cpp(536): warning C4267: “参数”: 从“size_t”转换到“uint8_t”，可能丢失数据
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtcppacketbuilder.cpp(553): warning C4267: “参数”: 从“size_t”转换到“uint8_t”，可能丢失数据
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtcppacketbuilder.cpp(570): warning C4267: “参数”: 从“size_t”转换到“uint8_t”，可能丢失数据
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtcppacketbuilder.cpp(587): warning C4267: “参数”: 从“size_t”转换到“uint8_t”，可能丢失数据
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtcppacketbuilder.cpp(604): warning C4267: “参数”: 从“size_t”转换到“uint8_t”，可能丢失数据
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtcppacketbuilder.cpp(708): warning C4267: “参数”: 从“size_t”转换到“uint8_t”，可能丢失数据
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtcppacketbuilder.cpp(720): warning C4267: “参数”: 从“size_t”转换到“uint8_t”，可能丢失数据
+  rtcppacket.cpp
+  rtcpcompoundpacketbuilder.cpp
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtcpcompoundpacketbuilder.cpp(366): warning C4267: “参数”: 从“size_t”转换到“uint8_t”，可能丢失数据
+d:\workspace\dshowcapture\dshowcapture\jrtp\jrtplib\rtcpcompoundpacketbuilder.cpp(382): warning C4267: “=”: 从“size_t”转换到“uint8_t”，可能丢失数据
+  正在生成代码...
+  正在编译...
+  rtcpcompoundpacket.cpp
+  rtcpbyepacket.cpp
+  rtcpapppacket.cpp
+  正在生成代码...
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(1357,5): warning MSB8012: TargetPath(D:\workspace\DShowCapture\Debug\libjrtp.lib) does not match the Library's OutputFile property value (D:\workspace\DShowCapture\DShowCapture\jrtp\lib\libjrtp.lib). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Lib.OutputFile).
+  libjrtp.vcxproj -> D:\workspace\DShowCapture\Debug\libjrtp.lib

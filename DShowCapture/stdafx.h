@@ -40,7 +40,7 @@
 #include <string>
 #include <regex>
 using namespace std;
-
+#define __D3DRM_H__
 //DShow库加载
 #include "Wmcodecdsp.h"
 #pragma comment(lib,"wmcodecdspuuid.lib")
@@ -65,11 +65,9 @@ using namespace std;
 #pragma comment(lib,"avutil.lib")  
 #pragma comment(lib,"swscale.lib")  
 
-#pragma comment(lib,"BasicUsageEnvironment.lib")  
-#pragma comment(lib,"groupsock.lib")  
-#pragma comment(lib,"liveMedia.lib")  
-#pragma comment(lib,"UsageEnvironment.lib")  
-
+#pragma comment(lib,"libjrtp.lib")  
+//#pragma comment(lib,"jrtplib_d.lib")  
+//#pragma comment(lib,"jthread_d.lib")  
 //要支持YUV420,也就是WMMEDIASUBTYPE_I420必须添加此头文件
 #include <wmsdkidl.h>
 #include "libyuv.h"

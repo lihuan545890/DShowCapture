@@ -6,7 +6,7 @@
 #include "DShowCapture.h"
 #include "DShowCaptureDlg.h"
 #include "afxdialogex.h"
-
+//#include "DirectDraw.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -56,6 +56,7 @@ CDShowCaptureDlg::CDShowCaptureDlg(CWnd* pParent /*=NULL*/)
 	m_bIsVideoOpen = FALSE;
 	m_bIsRecord = FALSE;
 	m_bIsPush = FALSE;
+	m_bIsPull = FALSE;
 }
 
 void CDShowCaptureDlg::DoDataExchange(CDataExchange* pDX)
@@ -71,11 +72,12 @@ BEGIN_MESSAGE_MAP(CDShowCaptureDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON_PUSHSTREAM, &CDShowCaptureDlg::OnBnClickedButtonPushstream)
-	ON_BN_CLICKED(IDC_BUTTON_RECORD, &CDShowCaptureDlg::OnBnClickedButtonRecord)
 	ON_BN_CLICKED(IDC_BUTTON_CAPTURE, &CDShowCaptureDlg::OnBnClickedButtonCapture)
 	ON_BN_CLICKED(IDC_BUTTON_GETDEVICES, &CDShowCaptureDlg::OnBnClickedButtonGetdevices)
 	ON_BN_CLICKED(IDC_BUTTON_CAMERASET, &CDShowCaptureDlg::OnBnClickedButtonCameraset)
 	ON_BN_CLICKED(IDC_BUTTON_INIT, &CDShowCaptureDlg::OnBnClickedButtonInit)
+
+	ON_BN_CLICKED(IDC_BUTTON_PULLSTREAM, &CDShowCaptureDlg::OnBnClickedButtonPullstream)
 END_MESSAGE_MAP()
 
 
@@ -112,9 +114,23 @@ BOOL CDShowCaptureDlg::OnInitDialog()
 
 	// TODO:  在此添加额外的初始化代码
 
+	WSADATA wsaData;
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+	{
+		MessageBox(_T("网络初始化失败！"), _T("提示"));
+	}
+
 	m_pVideoCapture =new CVideoCapture();
-	m_pMp4Record = new Mp4Record();
-	m_pRtspServer = new RTSPServerInstance();
+
+	m_pRtpSender = new RTPSender();
+	m_pRtpReceiver = new RTPReceiver();
+
+	frame_queue_init(&m_stVDecQueue);
+	frame_queue_start(&m_stVDecQueue);
+
+	frame_queue_init(&m_stADecQueue);
+	frame_queue_start(&m_stADecQueue);
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -168,48 +184,10 @@ HCURSOR CDShowCaptureDlg::OnQueryDragIcon()
 }
 
 
-void CDShowCaptureDlg::OnBnClickedButtonPushstream()
-{
-	// TODO:  在此添加控件通知处理程序代码
-	if (!m_bInit)
-	{
-		MessageBox(_T("请先初始化！"), _T("提示"));
-		return;
-	}	
-
-	if (!m_bIsVideoOpen)
-	{
-		MessageBox(_T("请打开采集！"), _T("提示"));
-		return;
-	}
-
-	if(m_bIsPush == FALSE)
-	{
-		ENCODE_PARAMS rParams;
-		rParams.stVidParams.nWidth = m_nWidth;
-		rParams.stVidParams.nHeight = m_nHeight;
-		rParams.stVidParams.nBitRate = 1024 * 1000;
-		rParams.stVidParams.nFrameRate = 30;
-		rParams.stAudParams.nBitRate = 64000;
-		rParams.stAudParams.nSampleRate = 96000;
-	
-		SetDlgItemText(IDC_BUTTON_PUSHSTREAM, _T("停止"));	
-		int nRet = m_pRtspServer->Start(rParams, &m_stVideoQueue, &m_stAudioQueue);
-		
-		m_bIsPush = TRUE;
-	}
-	else
-	{
-		SetDlgItemText(IDC_BUTTON_PUSHSTREAM, _T("推流"));	
-		m_bIsPush = FALSE;		
-	}
-}
-
-
 void CDShowCaptureDlg::OnBnClickedButtonRecord()
 {
 	// TODO:  在此添加控件通知处理程序代码
-	if (!m_bInit)
+/*	if (!m_bInit)
 	{
 		MessageBox(_T("请先初始化！"), _T("提示"));
 		return;
@@ -228,8 +206,7 @@ void CDShowCaptureDlg::OnBnClickedButtonRecord()
 		CString szTime = time.Format("%Y%m%d_%H%M%S");
 		CString filename =  _T("");
 		CString filepath = _T("D:\\Record");
-//		char strFilename[32]={0};
-//		strpy(strFilename, )
+
 		filename.Format(_T("%s\\%s.mp4"), filepath, szTime);
 		ENCODE_PARAMS rParams;
 		rParams.stVidParams.nWidth = m_nWidth;
@@ -251,6 +228,7 @@ void CDShowCaptureDlg::OnBnClickedButtonRecord()
 		int nRet = m_pMp4Record->StopRecord();
 		SetDlgItemText(IDC_BUTTON_RECORD, _T("录像"));
 	}
+	*/
 }
 
 
@@ -263,9 +241,11 @@ void CDShowCaptureDlg::OnBnClickedButtonCapture()
 		return;
 	}
 
-	if (m_bIsVideoOpen)
+	if (m_bIsVideoOpen == TRUE)
 	{
-		MessageBox(_T("相机已经打开！"), _T("提示"));
+		m_pVideoCapture->StopCapture();
+		SetDlgItemText(IDC_BUTTON_CAPTURE, _T("采集"));
+		m_bIsVideoOpen = FALSE;
 		return;
 	}
 
@@ -313,9 +293,13 @@ void CDShowCaptureDlg::OnBnClickedButtonCapture()
 	m_nHeight = nSetHeight;
 	
 	HWND h_wnd = GetDlgItem(IDC_STATIC_PREVIEW)->m_hWnd;
+
+
 	m_pVideoCapture->StartCapture(nResolutionIndex, h_wnd, m_nWidth, m_nHeight);
 
+	SetDlgItemText(IDC_BUTTON_CAPTURE, _T("停止"));
 	m_bIsVideoOpen = TRUE;
+//	GetDlgItem(IDC_BUTTON_CAPTURE)->SetDlgItemText(_T("停止"));
 }
 
 
@@ -425,4 +409,68 @@ void CDShowCaptureDlg::OnBnClickedButtonInit()
 	}
 
 	m_bInit = TRUE;
+}
+
+
+void CDShowCaptureDlg::OnBnClickedButtonPushstream()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	if (!m_bInit)
+	{
+		MessageBox(_T("请先初始化！"), _T("提示"));
+		return;
+	}
+
+	if (!m_bIsVideoOpen)
+	{
+		MessageBox(_T("请打开采集！"), _T("提示"));
+		return;
+	}
+
+	if (m_bIsPush == FALSE)
+	{
+		ENCODE_PARAMS rParams;
+		rParams.stVidParams.nWidth = m_nWidth;
+		rParams.stVidParams.nHeight = m_nHeight;
+		rParams.stVidParams.nBitRate = 1024 * 1000;
+		rParams.stVidParams.nFrameRate = 25;
+		rParams.stAudParams.nBitRate = 64000;
+		rParams.stAudParams.nSampleRate = 96000;
+
+		SetDlgItemText(IDC_BUTTON_PUSHSTREAM, _T("停止"));
+		//int nRet = m_pRtspServer->Start(rParams, &m_stVideoQueue, &m_stAudioQueue);
+		int nRet = m_pRtpSender->StartRTPSender(rParams, &m_stVideoQueue, &m_stAudioQueue);
+		m_bIsPush = TRUE;
+	}
+	else
+	{
+		SetDlgItemText(IDC_BUTTON_PUSHSTREAM, _T("推流"));
+		m_bIsPush = FALSE;
+	}
+}
+
+void CDShowCaptureDlg::OnBnClickedButtonPullstream()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if (m_bIsPull == FALSE)
+	{
+		ENCODE_PARAMS rParams;
+		rParams.stVidParams.nWidth = m_nWidth;
+		rParams.stVidParams.nHeight = m_nHeight;
+		rParams.stVidParams.nFrameRate = 25;
+		CDirectDraw *m_pDDraw = new CDirectDraw();
+		HWND h_wnd = GetDlgItem(IDC_STATIC_REMOTE)->m_hWnd;
+
+		m_pDDraw->InitDirectDraw(h_wnd, m_nWidth, m_nHeight);
+		int nRet = m_pRtpReceiver->StartRTPReceiver(m_pDDraw, rParams, &m_stVDecQueue, &m_stADecQueue);
+		SetDlgItemText(IDC_BUTTON_PULLSTREAM, _T("停止"));
+		m_bIsPull = TRUE;
+	}
+	else
+	{
+		SetDlgItemText(IDC_BUTTON_PULLSTREAM, _T("拉流"));
+		m_bIsPull = FALSE;
+	}
+
+	//	
 }

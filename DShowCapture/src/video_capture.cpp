@@ -188,16 +188,16 @@ bool CVideoCapture::StartCapture(int index, HWND hwnd, int width, int height)
 	hr = m_pCapture->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Video, m_pVideoFilter, m_pVideoGrabberFilter, NULL);
 	if (FAILED(hr))
 	{
-	//	AfxMessageBox(_T("Video RenderStream failed"));
+		AfxMessageBox(_T("Video RenderStream failed"));
 		return false;
 	}
 	
-	hr = m_pCapture->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Audio, m_pAudioFilter, m_pAudioGrabberFilter, NULL);
+/*	hr = m_pCapture->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Audio, m_pAudioFilter, m_pAudioGrabberFilter, NULL);
 	if (FAILED(hr))
 	{
 		return false;
 	}
-	
+*/	
 	FreeMediaType(pmt);
 	FreeMediaType(audiPmt);
 
@@ -207,7 +207,7 @@ bool CVideoCapture::StartCapture(int index, HWND hwnd, int width, int height)
 	m_pVW->put_AutoShow(OAFALSE);
 	m_pVW->put_Visible(OAFALSE);
 
-	m_pMediaControl->Run();
+
 
 	hr = m_pVW->put_Owner((OAHWND)hwnd);
 	if (FAILED(hr))
@@ -273,11 +273,14 @@ bool CVideoCapture::StartCapture(int index, HWND hwnd, int width, int height)
 		m_pVW->put_Visible(OATRUE);
 	}
 
+	m_pMediaControl->Run();
 	return true;
 }
 
 bool CVideoCapture::StopCapture()
 {
+	m_pMediaControl->Stop();
+
 	return true;
 }
 

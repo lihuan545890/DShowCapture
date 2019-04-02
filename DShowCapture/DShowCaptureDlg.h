@@ -4,9 +4,11 @@
 
 #pragma once
 
+#include <winsock2.h>
 #include "video_capture.h"
-#include "Mp4Record.h"
-#include "RtspServerInstance.h"
+//#include "Mp4Record.h"
+#include "rtp_sender.h"
+#include "rtp_receiver.h"
 //#include "framequeue.h"
 // CDShowCaptureDlg 对话框
 class CDShowCaptureDlg : public CDialogEx
@@ -22,8 +24,10 @@ public:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
 
 	CVideoCapture *m_pVideoCapture;
-	Mp4Record *m_pMp4Record;
-	RTSPServerInstance *m_pRtspServer;
+//	Mp4Record *m_pMp4Record;
+	RTPSender *m_pRtpSender;
+	RTPReceiver *m_pRtpReceiver;
+
 	CComboBox m_cbxVideoDevList;
 	CComboBox m_cbxAudioDevList;
 	CComboBox m_cbxVideoResList;
@@ -35,6 +39,7 @@ public:
 	BOOL m_bIsVideoOpen;
 	BOOL m_bIsRecord;
 	BOOL m_bIsPush;
+	BOOL m_bIsPull;
 	
 	int m_nWidth;
 	int m_nHeight;
@@ -42,6 +47,9 @@ public:
 	int m_nSampleRate;
 	FrameQueue m_stVideoQueue;
 	FrameQueue m_stAudioQueue;	
+
+	FrameQueue m_stVDecQueue;
+	FrameQueue m_stADecQueue;
 // 实现
 protected:
 	HICON m_hIcon;
@@ -53,10 +61,12 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnBnClickedButtonPushstream();
+
 	afx_msg void OnBnClickedButtonRecord();
 	afx_msg void OnBnClickedButtonCapture();
 	afx_msg void OnBnClickedButtonGetdevices();
 	afx_msg void OnBnClickedButtonCameraset();
 	afx_msg void OnBnClickedButtonInit();
+	afx_msg void OnBnClickedButtonPushstream();
+	afx_msg void OnBnClickedButtonPullstream();
 };
